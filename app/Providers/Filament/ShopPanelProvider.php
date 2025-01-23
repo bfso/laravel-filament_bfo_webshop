@@ -29,6 +29,7 @@ class ShopPanelProvider extends PanelProvider
                 'primary' => '#502479',
                 'secondary' => '#d50006',
             ])
+            ->brandLogo(asset('images/logo.png'))
             ->login()
             ->topNavigation()
             ->discoverResources(in: app_path('Filament/Shop/Resources'), for: 'App\\Filament\\Shop\\Resources')
