@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
 
+            // some changes
             // add fields
 
             $table->timestamps();
