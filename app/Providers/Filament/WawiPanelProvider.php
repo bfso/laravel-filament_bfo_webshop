@@ -17,29 +17,24 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Sapium\FilamentPackageSapiumCart\CartPlugin;
-use Sapium\FilamentPackageSapiumCheckout\CheckoutPlugin;
 use Sapium\FilamentPackageSapiumWawi\WawiPlugin;
 
-class AdminPanelProvider extends PanelProvider
+class WawiPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('admin')
-            ->path('admin')
-            ->login()
+            ->id('wawi')
+            ->path('wawi')
             ->colors([
-                'primary' => '#502479',
-                'secondary' => Color::Lime,
+                'primary' => Color::Amber,
             ])
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->discoverResources(in: app_path('Filament/Wawi/Resources'), for: 'App\\Filament\\Wawi\\Resources')
+            ->discoverPages(in: app_path('Filament/Wawi/Pages'), for: 'App\\Filament\\Wawi\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Wawi/Widgets'), for: 'App\\Filament\\Wawi\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
@@ -55,10 +50,7 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-            ->plugins([
-                CartPlugin::make(),
-                CheckoutPlugin::make(),
-            ])
+            ->plugin(WawiPlugin::make())
             ->authMiddleware([
                 Authenticate::class,
             ]);
