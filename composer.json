@@ -9,6 +9,10 @@
         "sapium.cart": {
             "url": "packages/sapium/filament-package_sapium_cart",
             "type": "path"
+        },
+        "sapium.checkout": {
+            "url": "packages/sapium/filament-package_sapium_checkout",
+            "type": "path"
         }
     },
     "require": {
@@ -16,7 +20,8 @@
         "filament/filament": "^3.2",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
-        "sapium/filament-package_sapium_cart": "dev-main"
+        "sapium/filament-package_sapium_cart": "dev-main",
+        "sapium/filament-package_sapium_checkout": "dev-main"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -64,7 +69,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Sapium\\FilamentPackageSapiumCart\\FilamentPackageSapiumCartServiceProvider"
+                "Sapium\\FilamentPackageSapiumCart\\FilamentPackageSapiumCartServiceProvider",
+                "Sapium\\FilamentPackageSapiumCart\\FilamentPackageSapiumCheckoutServiceProvider"
             ],
             "dont-discover": []
         }

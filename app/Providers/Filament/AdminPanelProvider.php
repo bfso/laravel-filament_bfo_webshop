@@ -18,6 +18,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Sapium\FilamentPackageSapiumCart\CartPlugin;
+use Sapium\FilamentPackageSapiumCheckout\CheckoutPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -54,6 +55,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 CartPlugin::make(),
+                CheckoutPlugin::make(),
             ])
             ->authMiddleware([
                 Authenticate::class,
