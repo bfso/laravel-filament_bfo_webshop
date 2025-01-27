@@ -1,9 +1,8 @@
 <?php
 
-namespace Sapium\FilamentPackageSapiumCart\Resources;
+namespace Sapium\FilamentPackageSapiumWawi\Resources;
 
 
-use App\Models\Cart;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -11,15 +10,16 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Sapium\FilamentPackageSapiumCart\Resources\CartResource\Pages\CreateCart;
-use Sapium\FilamentPackageSapiumCart\Resources\CartResource\Pages\EditCart;
-use Sapium\FilamentPackageSapiumCart\Resources\CartResource\Pages\ListCart;
+use Sapium\FilamentPackageSapiumWawi\Models\WawiProduct;
+use Sapium\FilamentPackageSapiumWawi\Resources\WawiProductResource\Pages\CreateWawiProduct;
+use Sapium\FilamentPackageSapiumWawi\Resources\WawiProductResource\Pages\EditWawiProduct;
+use Sapium\FilamentPackageSapiumWawi\Resources\WawiProductResource\Pages\ListWawiProduct;
 
-class CartResource extends Resource
+class WawiProductResource extends Resource
 {
 
-    protected static ?string $model = Cart::class;
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-cart';
+    protected static ?string $model = WawiProduct::class;
+    protected static ?string $navigationIcon = 'heroicon-o-cube-transparent';
 
     public static function form(Form $form): Form
     {
@@ -33,9 +33,9 @@ class CartResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListCart::route('/'),
-            'create' => CreateCart::route('/create'),
-            'edit' => EditCart::route('/{record}/edit'),
+            'index' => ListWawiProduct::route('/'),
+            'create' => CreateWawiProduct::route('/create'),
+            'edit' => EditWawiProduct::route('/{record}/edit'),
         ];
     }
 
