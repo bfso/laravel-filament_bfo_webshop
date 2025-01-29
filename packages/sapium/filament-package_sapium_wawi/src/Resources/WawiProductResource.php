@@ -25,6 +25,14 @@ class WawiProductResource extends Resource
     {
         $formComponents = [
             TextInput::make('id'),
+            TextInput::make('product_name'),
+            TextInput::make('product_description'),
+            TextInput::make('purchase_price'),
+            TextInput::make('product_price'),
+            TextInput::make('special_price'),
+            TextInput::make('special_price_from'),
+            TextInput::make('special_price_to'),
+
         ];
 
         return $form->schema($formComponents);
@@ -42,7 +50,14 @@ class WawiProductResource extends Resource
     public static function table(Table $table): Table
     {
         $tableComponents = [
-            TextColumn::make('id')
+            TextColumn::make('id'),
+            TextColumn::make('product_name'),
+            TextColumn::make('product_description'),
+            TextColumn::make('purchase_price'),
+            TextColumn::make('product_price'),
+            TextColumn::make('special_price'),
+            TextColumn::make('special_price_from'),
+            TextColumn::make('special_price_to'),
         ];
 
         return $table
