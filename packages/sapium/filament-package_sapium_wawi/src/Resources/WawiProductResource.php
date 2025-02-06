@@ -4,6 +4,7 @@ namespace Sapium\FilamentPackageSapiumWawi\Resources;
 
 
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Datepicker;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -24,15 +25,14 @@ class WawiProductResource extends Resource
     public static function form(Form $form): Form
     {
         $formComponents = [
-            TextInput::make('id'),
-            TextInput::make('product_name'),
+            TextInput::make('product_name')->required(),
             TextInput::make('product_description'),
-            TextInput::make('purchase_price'),
-            TextInput::make('product_price'),
-            TextInput::make('special_price'),
-            TextInput::make('special_price_from'),
-            TextInput::make('special_price_to'),
-
+            TextInput::make('purchase_price')->numeric(),
+            TextInput::make('product_price')->required()->numeric(),
+            TextInput::make('special_price')->numeric(),
+            DatePicker::make('special_price_from'),
+            DatePicker::make('special_price_to'),
+ 
         ];
 
         return $form->schema($formComponents);
@@ -57,7 +57,7 @@ class WawiProductResource extends Resource
             TextColumn::make('product_price'),
             TextColumn::make('special_price'),
             TextColumn::make('special_price_from'),
-            TextColumn::make('special_price_to'),
+            TextColumn::make('special_price_to')
         ];
 
         return $table
