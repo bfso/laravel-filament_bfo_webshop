@@ -30,6 +30,7 @@ return new class extends Migration
         // Table: order_items
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
+            $table->integer('order_id');
             $table->integer('original_item_id');
             $table->string('name', 255);
             $table->text('description');
@@ -58,5 +59,12 @@ return new class extends Migration
             $table->id();
             $table->string('country_label');
         });
+
+
+        // Create foreign keys
+        Schema::table('order_items', function (Blueprint $table) {
+            $table->foreign('order_id')->references('id')->on('orders');
+        });
+
     }
 };
