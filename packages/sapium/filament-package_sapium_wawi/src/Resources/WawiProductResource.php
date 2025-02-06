@@ -28,9 +28,9 @@ class WawiProductResource extends Resource
             TextInput::make('id'),
             TextInput::make('product_name')->required(),
             TextInput::make('product_description'),
-            TextInput::make('purchase_price')->numeric(),
-            TextInput::make('product_price')->required()->numeric(),
-            TextInput::make('special_price')->numeric(),
+            TextInput::make('purchase_price')->numeric()->suffix('CHF'),
+            TextInput::make('product_price')->required()->numeric()->suffix('CHF'),
+            TextInput::make('special_price')->numeric()->suffix('CHF'),
             DatePicker::make('special_price_from'),
             DatePicker::make('special_price_to'),
 
