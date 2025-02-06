@@ -6,6 +6,8 @@ namespace Sapium\FilamentPackageSapiumWawi\Resources;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Tabs;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -26,18 +28,36 @@ class WawiProductResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $formComponents = [
-            TextInput::make('product_name')->required(),
-            MarkdownEditor::make('product_description')->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList']),
-            TextInput::make('purchase_price')->numeric()->suffix('CHF'),
-            TextInput::make('product_price')->gt('purchase_price')->required()->numeric()->suffix('CHF'),
-            TextInput::make('special_price')->numeric()->suffix('CHF'),
-            DatePicker::make('special_price_from'),
-            DatePicker::make('special_price_to')->afterOrEqual('special_price_from'),
-            FileUpload::make('image')->image()
-        ];
+        return $form->schema([
+            Tabs::make('Product Details')
+                ->columnSpan('full')
+                ->tabs([
+                    Tab::make('General')
+                        ->schema([
+                            TextInput::make('product_name')->required(),
+                            MarkdownEditor::make('product_description')
+                                ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList']),
+                        ]),
 
-        return $form->schema($formComponents);
+                    Tab::make('Prices')
+                        ->schema([
+                            TextInput::make('purchase_price')->numeric()->suffix('CHF'),
+                            TextInput::make('product_price')->gt('purchase_price')->required()->numeric()->suffix('CHF'),
+                            TextInput::make('special_price')->numeric()->suffix('CHF'),
+                        ]),
+
+                    Tab::make('Special Prices')
+                        ->schema([
+                            DatePicker::make('special_price_from'),
+                            DatePicker::make('special_price_to')->afterOrEqual('special_price_from'),
+                        ]),
+
+                    Tab::make('Images')
+                        ->schema([
+                            FileUpload::make('image')->image(),
+                        ]),
+                ]),
+        ]);
     }
 
     public static function getPages(): array
