@@ -6,6 +6,9 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 
+use App\Models\Product;
+use Illuminate\Support\Facades\File;
+
 class FilamentPackageSapiumWawiServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
@@ -42,5 +45,22 @@ class FilamentPackageSapiumWawiServiceProvider extends PackageServiceProvider
         $this->app->singleton('filament-package_sapium_wawi', function () {
             return new WawiPlugin();
         });
+    }
+
+    public function ecportToJson()
+    {
+        $products = Product::all();
+
+        $jsonData = $products->toJson();
+
+        $filePath = storage_path('app/public/exports.json');
+
+        File::put($filePath, $jsonData);
+
+        return respomse()->json([
+            'message' => 'Data successfully exported',
+            'file' => $filePath
+        ]);
+
     }
 }
