@@ -18,11 +18,11 @@ return new class extends Migration
         // Table: orders
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('date_time');
-            $table->decimal('end_price', 10, 2);
-            $table->integer('checkout_customer_id');
-            $table->integer('delivery_method_id');
-            $table->integer('payment_method_id');
+            $table->timestamp('date_time')->nullable(false);
+            $table->decimal('end_price', 10, 2)->nullable(false);
+            $table->integer('checkout_customer_id')->nullable(false);
+            $table->integer('delivery_method_id')->nullable(false);
+            $table->integer('payment_method_id')->nullable(false);
             $table->timestamps();
         });
 
@@ -30,26 +30,27 @@ return new class extends Migration
         // Table: order_items
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('order_id');
-            $table->integer('original_item_id');
-            $table->string('name', 255);
-            $table->text('description');
-            $table->decimal('price', 10, 2);
-            $table->integer('quantity');
+            $table->integer('order_id')->nullable(false);
+            $table->integer('original_item_id')->nullable(false);
+            $table->string('name', 255)->nullable(false);
+            $table->text('description')->nullable(true);
+            $table->decimal('price', 10, 2)->nullable(false);
+            $table->integer('quantity')->nullable(false);
         });
 
 
         // Table: checkout customers
         Schema::create('checkout_customers', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name', 255);
-            $table->string('last_name', 255);
-            $table->string('email_address', 255);
-            $table->string('phone_number', 255);
-            $table->string('street', 255);
-            $table->string('zip', 255);
-            $table->string('city', 255);
-            $table->integer('country_id');
+            $table->string('first_name', 255)->nullable(false);
+            $table->string('last_name', 255)->nullable(false);
+            $table->date('birth_date')->nullable(false);
+            $table->string('email_address', 255)->nullable(false);
+            $table->string('phone_number', 255)->nullable(true);
+            $table->string('street', 255)->nullable(false);
+            $table->string('zip', 255)->nullable(false);
+            $table->string('city', 255)->nullable(false);
+            $table->integer('country_id')->nullable(false);
             $table->timestamps();
         });
 
