@@ -13,6 +13,8 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\Layout\Stack;
+
 
 class ProductResource extends Resource
 {
@@ -20,19 +22,12 @@ class ProductResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    public static function form(Form $form): Form
-    {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('title')
-            ]);
-    }
-
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('sku')
+                Stack::make([
+                    Tables\Columns\TextColumn::make('sku')
                 ->searchable(),
                 Tables\Columns\TextColumn::make('title')
                 ->label('Title')
@@ -41,23 +36,21 @@ class ProductResource extends Resource
                 ->label('Price'),
                 Tables\Columns\TextColumn::make('description')
                 ->label('Description')
+                ])
+            ])
+            ->contentGrid([
+                'md' => 2,
+                'xl' => 3,
             ])
             ->filters([
                 //
             ])
+
             ->headerActions([
                 Action::make('Sync')
                 ->action(function() {
                     dd('Placeholder');
                 })
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 
@@ -72,8 +65,6 @@ class ProductResource extends Resource
     {
         return [
             'index' => Pages\ListProducts::route('/'),
-            'create' => Pages\CreateProduct::route('/create'),
-            'edit' => Pages\EditProduct::route('/{record}/edit'),
         ];
     }
 }
