@@ -13,5 +13,13 @@ class WawiProduct extends Model
 
     protected $fillable = [
         'id',
+        'product_name',
+        'product_description',
+        'purchase_price',
+        'product_price',
+        'special_price',
+        'special_price_from',
+        'special_price_to',
+        
     ];
 }
