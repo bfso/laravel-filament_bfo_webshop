@@ -11,5 +11,12 @@ class Cart extends Model
 
     protected $fillable = [
         'id',
+        'quantity',
     ];
+
+    public function updateQuantity(int $quantity): void
+    {
+        $this->quantity = max(1, $quantity);
+        $this->save();
+    }
 }
