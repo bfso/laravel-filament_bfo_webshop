@@ -71,15 +71,81 @@ class WawiProductResource extends Resource
 
     public static function table(Table $table): Table
     {
+        // Use toggleable() to allow users to select visible columns.
+        // Important: Key columns should not be toggleable.
         $tableComponents = [
-            TextColumn::make('id'),
-            TextColumn::make('product_name'),
-            TextColumn::make('product_description'),
-            TextColumn::make('purchase_price'),
-            TextColumn::make('product_price'),
-            TextColumn::make('special_price'),
-            TextColumn::make('special_price_from'),
+            TextColumn::make('id')
+                ->sortable(),
+            TextColumn::make('product_name')
+                ->label('Name')
+                ->sortable()
+                ->searchable(),
+            TextColumn::make('product_description')
+                ->label('Beschreibung')
+                ->sortable()
+                ->searchable()
+                ->wrap()
+                ->limit(50),
+            TextColumn::make('purchase_price')
+                ->label('Kaufpreis')
+                ->money('CHF')
+                ->sortable()
+                ->searchable()
+                ->toggleable(),
+            TextColumn::make('product_price')
+                ->label('Verkaufpreis')
+                ->money('CHF')
+                ->sortable()
+                ->searchable()
+                ->toggleable(),
+            TextColumn::make('special_price')
+                ->label('Spezialpreis')
+                ->money('CHF')
+                ->sortable()
+                ->searchable()
+                ->toggleable(),
+            TextColumn::make('special_price_from')
+                ->label('Start Spezialpreis')
+                ->date()
+                ->sortable()
+                ->searchable()
+                ->toggleable(),
             TextColumn::make('special_price_to')
+                ->label('End Spezialpreis')
+                ->date()
+                ->sortable()
+                ->searchable()
+                ->toggleable(),
+            TextColumn::make('image')
+                ->label('Bild')
+                ->sortable()
+                ->searchable()
+                ->toggleable(isToggledHiddenByDefault: true)
+            ->sortable()
+            ->searchable()
+            ->toggleable(),
+            TextColumn::make('product_price')
+            ->label('Verkaufpreis')
+            ->sortable()
+            ->searchable()
+            ->toggleable(),
+            TextColumn::make('special_price')
+            ->label('Spezialpreis')
+            ->sortable()
+            ->searchable()
+            ->toggleable(isToggledHiddenByDefault: true),
+            TextColumn::make('special_price_from')
+            ->label('Start Spezialpreis')
+            ->date()
+            ->sortable()
+            ->searchable()
+            ->toggleable(isToggledHiddenByDefault: true),
+            TextColumn::make('special_price_to')
+            ->label('End Spezialpreis')
+            ->date()
+            ->sortable()
+            ->searchable()
+            ->toggleable(isToggledHiddenByDefault: true),
         ];
 
         return $table
