@@ -15,6 +15,8 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Tables\Filters\Filter;
+use Illuminate\Database\Eloquent\Builder;
 use Sapium\FilamentPackageSapiumWawi\Models\WawiProduct;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiProductResource\Pages\CreateWawiProduct;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiProductResource\Pages\EditWawiProduct;
@@ -121,36 +123,108 @@ class WawiProductResource extends Resource
                 ->sortable()
                 ->searchable()
                 ->toggleable(isToggledHiddenByDefault: true)
-            ->sortable()
-            ->searchable()
-            ->toggleable(),
+                ->sortable()
+                ->searchable()
+                ->toggleable(),
             TextColumn::make('product_price')
-            ->label('Verkaufpreis')
-            ->sortable()
-            ->searchable()
-            ->toggleable(),
+                ->label('Verkaufpreis')
+                ->sortable()
+                ->searchable()
+                ->toggleable(),
             TextColumn::make('special_price')
-            ->label('Spezialpreis')
-            ->sortable()
-            ->searchable()
-            ->toggleable(isToggledHiddenByDefault: true),
+                ->label('Spezialpreis')
+                ->sortable()
+                ->searchable()
+                ->toggleable(isToggledHiddenByDefault: true),
             TextColumn::make('special_price_from')
-            ->label('Start Spezialpreis')
-            ->date()
-            ->sortable()
-            ->searchable()
-            ->toggleable(isToggledHiddenByDefault: true),
+                ->label('Start Spezialpreis')
+                ->date()
+                ->sortable()
+                ->searchable()
+                ->toggleable(isToggledHiddenByDefault: true),
             TextColumn::make('special_price_to')
-            ->label('End Spezialpreis')
-            ->date()
-            ->sortable()
-            ->searchable()
-            ->toggleable(isToggledHiddenByDefault: true),
+                ->label('End Spezialpreis')
+                ->date()
+                ->sortable()
+                ->searchable()
+                ->toggleable(isToggledHiddenByDefault: true),
         ];
 
         return $table
             ->columns($tableComponents)
-            ->filters([])
+            ->filters([
+                Filter::make('range_purchase_price')
+                    ->visible(fn (Table $table): bool => $table->getColumn('purchase_price')?->isVisible())
+                    ->form([
+                        TextInput::make('min_Kaufpreis')->numeric()->label('Min. Kaufpreis'),
+                        TextInput::make('max_Kaufpreis')->numeric()->label('Max. Kaufpreis'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['min_Kaufpreis'],
+                                fn (Builder $query, $price): Builder => $query->where('purchase_price', '>=', $price),
+                            )
+                            ->when(
+                                $data['max_Kaufpreis'],
+                                fn (Builder $query, $price): Builder => $query->where('purchase_price', '<=', $price),
+                            );
+                    }),
+                Filter::make('range_product_price')
+                    ->visible(fn (Table $table): bool => $table->getColumn('product_price')?->isVisible())
+                    ->form([
+                        TextInput::make('min_Verkaufpreis')->numeric()->label('Min. Verkaufpreis'),
+                        TextInput::make('max_Verkaufpreis')->numeric()->label('Max. Verkaufpreis'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['min_Verkaufpreis'],
+                                fn (Builder $query, $price): Builder => $query->where('product_price', '>=', $price),
+                            )
+                            ->when(
+                                $data['max_Verkaufpreis'],
+                                fn (Builder $query, $price): Builder => $query->where('product_price', '<=', $price),
+                            );
+                    }),
+                Filter::make('range_special_price')
+                    ->visible(fn (Table $table): bool => $table->getColumn('special_price')?->isVisible())
+                    ->form([
+                        TextInput::make('min_Spezialpreis')->numeric()->label('Min. Spezialpreis'),
+                        TextInput::make('max_Spezialpreis')->numeric()->label('Max. Spezialpreis'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['min_Spezialpreis'],
+                                fn (Builder $query, $price): Builder => $query->where('special_price', '>=', $price),
+                            )
+                            ->when(
+                                $data['max_Spezialpreis'],
+                                fn (Builder $query, $price): Builder => $query->where('special_price', '<=', $price),
+                            );
+                    }),
+                Filter::make('date_range')
+                    ->visible(fn (Table $table): bool =>  
+                        $table->getColumn('special_price_from')?->isVisible() && 
+                        $table->getColumn('special_price_to')?->isVisible()
+                    )
+                    ->form([
+                        DatePicker::make('Start_Spezialpreis')->label('Start Spezialpreis'),
+                        DatePicker::make('End_Spezialpreis')->label('End Spezialpreis'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['Start_Spezialpreis'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('special_price_from', '>=', $date),
+                            )
+                            ->when(
+                                $data['End_Spezialpreis'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('special_price_to', '<=', $date),
+                            );
+                    }),
+            ])
             ->actions([
                 EditAction::make(),
             ])
