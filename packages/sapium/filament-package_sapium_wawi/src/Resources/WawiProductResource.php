@@ -56,7 +56,9 @@ class WawiProductResource extends Resource
 
                     Tab::make('Images')
                         ->schema([
-                            FileUpload::make('image')->image(),
+                            FileUpload::make('image')
+                                ->image()
+                                ->imageEditor()
                         ]),
                 ]),
         ]);
