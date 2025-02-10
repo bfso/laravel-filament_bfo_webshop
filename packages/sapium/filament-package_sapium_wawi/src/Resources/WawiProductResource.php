@@ -56,7 +56,9 @@ class WawiProductResource extends Resource
 
                     Tab::make('Images')
                         ->schema([
-                            FileUpload::make('image')->image(),
+                            FileUpload::make('image')
+                                ->image()
+                                ->imageEditor()
                         ]),
                 ]),
         ]);
@@ -87,7 +89,8 @@ class WawiProductResource extends Resource
                 ->sortable()
                 ->searchable()
                 ->wrap()
-                ->limit(50),
+                ->limit(50)
+                ->markdown(),
             TextColumn::make('purchase_price')
                 ->label('Kaufpreis')
                 ->money('CHF')
