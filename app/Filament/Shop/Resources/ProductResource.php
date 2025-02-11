@@ -7,11 +7,14 @@ use App\Filament\Shop\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Tables\Filters\Filter;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+
 
 class ProductResource extends Resource
 {
@@ -42,8 +45,23 @@ class ProductResource extends Resource
                 ->label('Description')
             ])
             ->filters([
-                //
-            ])
+                Filter::make('price_range')
+                    ->form([
+                        TextInput::make('min_price')
+                            ->numeric()
+                            ->label('Min Price (CHF)')
+                            ->placeholder('Enter minimum price'),
+                        TextInput::make('max_price')
+                            ->numeric()
+                            ->label('Max Price (CHF)')
+                            ->placeholder('Enter maximum price'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query
+                            ->when($data['min_price'], fn ($query, $min) => $query->where('price', '>=', $min))
+                            ->when($data['max_price'], fn ($query, $max) => $query->where('price', '<=', $max));
+                    }),     
+                ])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
