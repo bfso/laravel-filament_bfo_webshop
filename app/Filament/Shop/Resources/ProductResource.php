@@ -62,15 +62,7 @@ class ProductResource extends Resource
                             ->when($data['min_price'], fn ($query, $min) => $query->where('price', '>=', $min))
                             ->when($data['max_price'], fn ($query, $max) => $query->where('price', '<=', $max));
                     }),     
-                ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+                ]);
     }
 
     public static function getRelations(): array
