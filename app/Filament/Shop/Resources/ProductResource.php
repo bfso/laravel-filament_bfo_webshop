@@ -61,8 +61,26 @@ class ProductResource extends Resource
                         return $query
                             ->when($data['min_price'], fn ($query, $min) => $query->where('price', '>=', $min))
                             ->when($data['max_price'], fn ($query, $max) => $query->where('price', '<=', $max));
-                    }),     
-                ]);
+                    })
+                    ->indicateUsing(function (array $data) {
+                        $indicators = [];
+                        if (!empty($data['min_price'])) {
+                            $indicators[] = 'Min Price: ' . $data['min_price'] . ' CHF';
+                        }
+                        if (!empty($data['max_price'])) {
+                            $indicators[] = 'Max Price: ' . $data['max_price'] . ' CHF';
+                        }
+                        return $indicators;
+                    }),
+            ])            
+            ->actions([
+                Tables\Actions\EditAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ]);
     }
 
     public static function getRelations(): array
