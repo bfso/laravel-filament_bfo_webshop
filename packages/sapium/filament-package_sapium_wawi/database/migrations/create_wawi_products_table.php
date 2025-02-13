@@ -9,15 +9,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('wawi_products', function (Blueprint $table) {
-                $table->id();
-                $table->string('product_name');
-                $table->string('product_description');
-                $table->string('purchase_price');
-                $table->string('product_price');
-                $table->string('special_price');
-                $table->string('special_price_from');
-                $table->string('special_price_to');
-                // add fields
+            $table->id();
+            $table->string('product_name');
+            $table->text('product_description')->nullable();
+            $table->float('purchase_price')->nullable();
+            $table->float('product_price');
+            $table->float('special_price')->nullable();
+            $table->date('special_price_from')->nullable();
+            $table->date('special_price_to')->nullable();
+            $table->string('image')->nullable(); 
+            // add fields
     
                 $table->timestamps();
             });

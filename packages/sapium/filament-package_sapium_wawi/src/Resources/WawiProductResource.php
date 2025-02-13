@@ -54,7 +54,7 @@ class WawiProductResource extends Resource
                             DatePicker::make('special_price_to')->afterOrEqual('special_price_from'),
                         ]),
 
-                    Tab::make('Images')
+                    Tab::make('Image')
                         ->schema([
                             FileUpload::make('image')
                                 ->image()
