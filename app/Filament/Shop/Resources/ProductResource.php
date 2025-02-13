@@ -72,14 +72,6 @@ class ProductResource extends Resource
                         }
                         return $indicators;
                     }),
-            ])            
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 
