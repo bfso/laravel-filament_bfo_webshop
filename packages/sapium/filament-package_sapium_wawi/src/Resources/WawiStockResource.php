@@ -44,6 +44,7 @@ class WawiStockResource extends Resource
                             TextInput::make('amount')
                                 ->numeric(),
                             TextInput::make('price')
+                                ->label('Purchase Price')
                                 ->numeric()
                                 ->suffix('CHF'),
                             ]),
@@ -69,17 +70,20 @@ class WawiStockResource extends Resource
             TextColumn::make('id')
                 ->sortable(),
             TextColumn::make('color')
-                ->label('Name')
+                ->label('Color')
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->formatStateUsing(function ($state) {
+                    return "<div style='width: 20px; height: 20px; background-color: {$state};' title='{$state}'></div>";
+                })
+                ->html(),
             TextColumn::make('description')
                 ->label('Beschreibung')
                 ->sortable()
                 ->searchable()
                 ->wrap()
                 ->limit(50)
-                ->markdown()
-                ->toggleable(),
+                ->markdown(),
             TextColumn::make('price')
                 ->label('Kaufpreis')
                 ->money('CHF')
@@ -88,14 +92,32 @@ class WawiStockResource extends Resource
                 ->toggleable(),
             TextColumn::make('amount')
                 ->sortable()
-                ->searchable()
                 ->toggleable(),
         ];
 
         return $table
             ->columns($tableComponents)
             ->filters([
-            //   here can you make Filters for the table
+                Filter::make('amount')
+                    ->form([
+                        TextInput::make('amount_from')
+                            ->numeric()
+                            ->placeholder('Min. amount')
+                            ->label('Min. amount'),
+                        TextInput::make('amount_to')
+                            ->numeric()
+                            ->placeholder('Max. amount')
+                            ->label('Max. amount'),
+                    ])
+                    ->query(function (Builder $query, array $data) {
+                        return $query->when(
+                            $data['amount_from'] ?? null,
+                            fn (Builder $query, $amountFrom) => $query->where('amount', '>=', $amountFrom)
+                        )->when(
+                            $data['amount_to'] ?? null,
+                            fn (Builder $query, $amountTo) => $query->where('amount', '<=', $amountTo)
+                        );
+                    })
             ])
             ->actions([
                 EditAction::make(),
