@@ -54,7 +54,7 @@ class WawiProductResource extends Resource
                             DatePicker::make('special_price_to')->afterOrEqual('special_price_from'),
                         ]),
 
-                    Tab::make('Images')
+                    Tab::make('Image')
                         ->schema([
                             FileUpload::make('image')
                                 ->image()
@@ -129,28 +129,6 @@ class WawiProductResource extends Resource
                 ->sortable()
                 ->searchable()
                 ->toggleable(),
-            TextColumn::make('product_price')
-                ->label('Verkaufpreis')
-                ->sortable()
-                ->searchable()
-                ->toggleable(),
-            TextColumn::make('special_price')
-                ->label('Spezialpreis')
-                ->sortable()
-                ->searchable()
-                ->toggleable(isToggledHiddenByDefault: true),
-            TextColumn::make('special_price_from')
-                ->label('Start Spezialpreis')
-                ->date()
-                ->sortable()
-                ->searchable()
-                ->toggleable(isToggledHiddenByDefault: true),
-            TextColumn::make('special_price_to')
-                ->label('End Spezialpreis')
-                ->date()
-                ->sortable()
-                ->searchable()
-                ->toggleable(isToggledHiddenByDefault: true),
         ];
 
         return $table

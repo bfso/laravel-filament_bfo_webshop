@@ -20,6 +20,7 @@ class WawiProduct extends Model
         'special_price',
         'special_price_from',
         'special_price_to',
+        'image',
         
     ];
 }
