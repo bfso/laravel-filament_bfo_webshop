@@ -57,7 +57,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 CartPlugin::make(),
-//                CheckoutPlugin::make(),
+                CheckoutPlugin::make(),
             ])
             ->authMiddleware([
                 Authenticate::class,

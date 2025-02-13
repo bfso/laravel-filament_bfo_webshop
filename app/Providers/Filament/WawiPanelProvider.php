@@ -50,7 +50,7 @@ class WawiPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-//            ->plugin(WawiPlugin::make())
+            ->plugin(WawiPlugin::make())
             ->authMiddleware([
                 Authenticate::class,
             ]);
