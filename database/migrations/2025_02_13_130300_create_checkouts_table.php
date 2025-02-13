@@ -20,9 +20,9 @@ return new class extends Migration
             $table->id();
             $table->timestamp('date_time')->nullable(false);
             $table->decimal('end_price', 10, 2)->nullable(false);
-            $table->integer('checkout_customer_id')->nullable(false);
-            $table->integer('delivery_method_id')->nullable(false);
-            $table->integer('payment_method_id')->nullable(false);
+            $table->foreignId('checkout_customer_id')->nullable(false);
+            $table->foreignId('delivery_method_id')->nullable();
+            $table->foreignId('payment_method_id')->nullable();
             $table->timestamps();
         });
 
@@ -50,7 +50,7 @@ return new class extends Migration
             $table->string('street', 255)->nullable(false);
             $table->string('zip', 255)->nullable(false);
             $table->string('city', 255)->nullable(false);
-            $table->integer('country_id')->nullable(false);
+            $table->foreignId('country_id')->nullable(false);
             $table->timestamps();
         });
 

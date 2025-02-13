@@ -8,5 +8,5 @@ class Checkout extends Model
 {
     protected $fillable = [
         
-    ]
+    ];
 }
