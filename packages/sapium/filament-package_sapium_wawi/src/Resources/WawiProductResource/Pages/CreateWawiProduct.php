@@ -19,8 +19,8 @@ class CreateWawiProduct extends CreateRecord
     protected function getSavedNotificationTitle(): ?string
     {
         $record = $this->record;
-        \Log::info('WawiProduct created', ['id' => $record->id, 'product_name' => $record->name]);
-        return "Product '{$record->name}' has been updated.";
+        \Log::info('WawiProduct created', ['id' => $record->id, 'product_name' => $record->product_name]);
+        return "Product has been updated.";
     }
 
 }
