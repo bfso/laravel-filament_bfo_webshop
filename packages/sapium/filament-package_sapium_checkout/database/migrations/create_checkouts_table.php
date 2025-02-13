@@ -16,7 +16,7 @@ return new class extends Migration
     {
 
         // Table: orders
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('checkouts', function (Blueprint $table) {
             $table->id();
             $table->timestamp('date_time')->nullable(false);
             $table->decimal('end_price', 10, 2)->nullable(false);
@@ -28,9 +28,9 @@ return new class extends Migration
 
 
         // Table: order_items
-        Schema::create('order_items', function (Blueprint $table) {
+        Schema::create('checkout_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('order_id')->nullable(false);
+            $table->integer('checkout_id')->nullable(false);
             $table->integer('original_item_id')->nullable(false);
             $table->string('name', 255)->nullable(false);
             $table->text('description')->nullable(true);
@@ -63,8 +63,8 @@ return new class extends Migration
 
 
         // Create foreign keys
-        Schema::table('order_items', function (Blueprint $table) {
-            $table->foreign('order_id')->references('id')->on('orders');
+        Schema::table('checkout_items', function (Blueprint $table) {
+            $table->foreign('checkout_id')->references('id')->on('checkouts');
         });
 
     }
