@@ -12,4 +12,8 @@ class Order extends Model
     protected $fillable = [
         'id',
     ];
+
+    public function orders() {
+        
+    }
 }

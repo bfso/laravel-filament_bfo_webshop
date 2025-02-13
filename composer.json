@@ -22,8 +22,10 @@
     "require": {
         "php": "^8.2",
         "filament/filament": "^3.2",
+        "filament/forms": "^3.2",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
+        "livewire/livewire": "^3.5",
         "sapium/filament-package_sapium_cart": "dev-main",
         "sapium/filament-package_sapium_checkout": "dev-main",
         "sapium/filament-package_sapium_wawi": "dev-main"
