@@ -7,21 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class Checkout extends Model
 {
-   use HasFactory;
+    use HasFactory;
 
 
-   /**
-    * Table name
-    *
-    * @var string
-    */
-   protected $table = 'checkouts';
-   protected $primaryKey = 'id';
-   public $incrementing = true;
-   public $timestaps = true;
-   protected $keyType = 'int';
-   protected $fillable = [
-    'end_price',
-    'checkout_customer_id'
-   ];
+    /**
+     * Table name
+     *
+     * @var string
+     */
+    protected $table = 'checkouts';
+    protected $primaryKey = 'id';
+    public $incrementing = true;
+    public $timestaps = true;
+    protected $keyType = 'int';
+    protected $fillable = [
+     'end_price',
+     'checkout_customer_id',
+     'delivery_method_id',
+     'payment_method_id',
+    ];
+ 
+ 
+ 
+    public function customer(): BelongsTo {
+     return $this->belongsTo(CheckoutCustomer::class);
+    }
 }
