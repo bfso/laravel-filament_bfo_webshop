@@ -14,4 +14,10 @@ class Checkout extends Model
         'delivery_method_id',
         'payment_method_id'
     ];
+
+    public function customer() {
+        return $this->belongsTo(CheckoutCustomer::class);
+    }
+
+
 }
