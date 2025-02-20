@@ -55,7 +55,8 @@ class ProductResource extends Resource
                 \Filament\Tables\Actions\Action::make("sync_product")
                     ->label("Sync Product")
                     ->action(function () {
-                        return redirect('/packages/sapium/filament-package_sapium_wawi/src/WawigetProduct.php');
+                        $products = \Sapium\FilamentPackageSapiumWawi\WawigetProduct::sync();
+                        
                     })
             ])            
             ->bulkActions([
