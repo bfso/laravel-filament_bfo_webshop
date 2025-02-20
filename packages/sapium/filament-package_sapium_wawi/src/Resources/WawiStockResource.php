@@ -27,7 +27,7 @@ class WawiStockResource extends Resource
 {
 
     protected static ?string $model = WawiStock::class;
-    protected static ?string $navigationIcon = 'heroicon-o-cube-transparent';
+    protected static ?string $navigationIcon = 'heroicon-o-circle-stack';
 
     public static function form(Form $form): Form
     {

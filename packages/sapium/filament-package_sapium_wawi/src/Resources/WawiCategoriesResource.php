@@ -27,7 +27,8 @@ class WawiCategoriesResource extends Resource
 {
 
     protected static ?string $model = WawiCategories::class;
-    protected static ?string $navigationIcon = 'heroicon-o-cube-transparent';
+    protected static ?string $navigationIcon = 'heroicon-o-archive-box';
+
 
     public static function form(Form $form): Form
     {

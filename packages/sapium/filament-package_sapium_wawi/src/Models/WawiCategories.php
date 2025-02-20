@@ -7,14 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class WawiCategories extends Model
 {
-    use HasFactory; 
+    use HasFactory;
 
-    protected $table = "wawi_categories";
+    protected $table = 'wawi_categories';
+
     protected $fillable = [
-        'name', 
+        'id',
+        'name',
         'description',
-        'color'
-    ];  
+        'color', // Background color for the category label
+    ];
 
-    // Define the relationship between stock and product
+
+    // Define the relationship with WawiProduct
+    public function products()
+    {
+        return $this->hasMany(WawiProduct::class, 'category_id'); // Assuming 'category_id' is the foreign key in wawi_products
+    }
 }
