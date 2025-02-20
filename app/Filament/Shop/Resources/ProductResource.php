@@ -3,21 +3,14 @@
 namespace App\Filament\Shop\Resources;
 
 use App\Filament\Shop\Resources\ProductResource\Pages;
-use App\Filament\Shop\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Tables\Filters\Filter;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\Layout\Stack;
-
-
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Table;
 
 class ProductResource extends Resource
 {
@@ -28,22 +21,27 @@ class ProductResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->columns([
+              ->columns([
+                ImageColumn::make('image')
+                    ->label('Image')
+                    ->extraAttributes(['class' => 'product-image']),
                 Stack::make([
                     Tables\Columns\TextColumn::make('sku')
-                ->searchable(),
-                Tables\Columns\TextColumn::make('title')
-                ->label('Title')
-                ->searchable(),
-                Tables\Columns\TextColumn::make('price')
-                ->label('Price'),
-                Tables\Columns\TextColumn::make('description')
-                ->label('Description')
+                        ->searchable(),
+                    Tables\Columns\TextColumn::make('title')
+                        ->label('Title')
+                        ->searchable(),
+                    Tables\Columns\TextColumn::make('price')
+                        ->label('Price')
+                        ->searchable(),
+                    Tables\Columns\TextColumn::make('description')
+                        ->label('Description')
+                        ->limit(50), // Längere Beschreibungen kürzen
                 ])
             ])
             ->contentGrid([
-                'md' => 2,
-                'xl' => 3,
+                'md' => 4,
+                'xl' => 4, // Mehr Spalten für bessere Darstellung
             ])
             ->filters([
                 Filter::make('price_range')
@@ -77,9 +75,7 @@ class ProductResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
