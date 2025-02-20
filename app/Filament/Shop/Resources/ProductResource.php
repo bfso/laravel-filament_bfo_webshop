@@ -4,6 +4,7 @@ namespace App\Filament\Shop\Resources;
 
 use App\Filament\Shop\Resources\ProductResource\Pages;
 use App\Filament\Shop\Resources\ProductResource\RelationManagers;
+use App\Models\Cart;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -12,6 +13,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
+use Sapium\FilamentPackageSapiumCart\Resources\CartItemResource\Components\CartAction;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -40,6 +42,9 @@ class ProductResource extends Resource
                 Tables\Columns\TextColumn::make('description')
                 ->label('Description')
                 ])
+            ])
+            ->actions([
+                CartAction::make(),
             ])
             ->contentGrid([
                 'md' => 2,
