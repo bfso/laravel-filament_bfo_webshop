@@ -4,7 +4,9 @@ namespace App\Filament\Shop\Resources;
 
 use App\Filament\Shop\Resources\ProductResource\Pages;
 use App\Models\Product;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\Layout\Stack;
@@ -27,22 +29,35 @@ class ProductResource extends Resource
                     ->extraAttributes(['class' => 'product-image']),
                 Stack::make([
                     Tables\Columns\TextColumn::make('sku')
-                        ->searchable(),
-                    Tables\Columns\TextColumn::make('title')
+                        ->searchable()
+                        ->sortable(),
+                        Tables\Columns\TextColumn::make('title')
                         ->label('Title')
-                        ->searchable(),
-                    Tables\Columns\TextColumn::make('price')
+                        ->searchable()
+                        ->sortable()
+                        ->extraAttributes(['class' => 'product-title']),
+
+                        Tables\Columns\TextColumn::make('price')
                         ->label('Price')
-                        ->searchable(),
+                        ->searchable()
+                        ->sortable()
+                        ->getStateUsing(function ($record) {
+                            return $record->price . ' CHF';
+                        }),
+
                     Tables\Columns\TextColumn::make('description')
                         ->label('Description')
                         ->limit(50), // Längere Beschreibungen kürzen
                 ])
             ])
+
             ->contentGrid([
-                'md' => 4,
-                'xl' => 4, // Mehr Spalten für bessere Darstellung
-            ])
+              'default' => 1,
+              'sm' => 2,
+              'md' => 3,
+              'lg' => 4,
+              'xl' => 5,
+          ])
             ->filters([
                 Filter::make('price_range')
                     ->form([
@@ -82,6 +97,7 @@ class ProductResource extends Resource
     {
         return [
             'index' => Pages\ListProducts::route('/'),
+
         ];
     }
 }
