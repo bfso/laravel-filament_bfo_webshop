@@ -20,6 +20,13 @@ class WawiProduct extends Model
         'special_price',
         'special_price_from',
         'special_price_to',
-        
+        'image',
+        'category_id', // Add the category_id to the fillable array
     ];
+
+    // Define the relationship with WawiCategories
+    public function category()
+    {
+        return $this->belongsTo(WawiCategories::class, 'category_id'); // Assuming 'category_id' is the foreign key in wawi_products
+    }
 }
