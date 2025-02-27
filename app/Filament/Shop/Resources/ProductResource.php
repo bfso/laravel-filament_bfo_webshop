@@ -44,7 +44,7 @@ class ProductResource extends Resource
                 ])
             ])
             ->actions([
-                CartAction::make(),
+                CartAction::make('add_to_cart'),
             ])
             ->contentGrid([
                 'md' => 2,
