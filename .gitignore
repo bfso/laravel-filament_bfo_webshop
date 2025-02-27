@@ -21,3 +21,9 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+start
+stop
+setup
+exec
+switch-branch-migrate
+art
