@@ -13,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\Layout\Stack;
 
 class ProductResource extends Resource
 {
@@ -32,7 +33,17 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Stack::make([
+                    Tables\Columns\TextColumn::make('sku')
+                ->searchable(),
+                Tables\Columns\TextColumn::make('title')
+                ->label('Title')
+                ->searchable(),
+                Tables\Columns\TextColumn::make('price')
+                ->label('Price'),
+                Tables\Columns\TextColumn::make('description')
+                ->label('Description')
+                ])
             ])
             ->filters([
                 //
@@ -40,11 +51,13 @@ class ProductResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])
-            ->headerActions(
-                [\Filament\Tables\Actions\Action::make("sync_product")->action(function(){
-                    dd('asdf');
-                })]
-            )
+            ->headerActions([
+                \Filament\Tables\Actions\Action::make("sync_product")
+                    ->label("Sync Product")
+                    ->action(function () {
+                        return redirect('/packages/sapium/filament-package_sapium_wawi/src/WawigetProduct.php');
+                    })
+            ])            
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
