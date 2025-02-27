@@ -3,12 +3,23 @@
 namespace App\Filament\Shop\Resources;
 
 use App\Filament\Shop\Resources\ProductResource\Pages;
+
+use App\Filament\Shop\Resources\ProductResource\RelationManagers;
+use App\Models\Cart;
+
 use App\Models\Product;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Resources\Resource;
 use Filament\Tables;
+
+use Filament\Tables\Actions\Action;
+use Sapium\FilamentPackageSapiumCart\Resources\CartItemResource\Components\CartAction;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Filters\Filter;
@@ -49,6 +60,10 @@ class ProductResource extends Resource
                         ->label('Description')
                         ->limit(50), // Längere Beschreibungen kürzen
                 ])
+            ])
+
+            ->actions([
+                CartAction::make('add_to_cart'),
             ])
 
             ->contentGrid([
