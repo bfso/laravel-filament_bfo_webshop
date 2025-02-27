@@ -9,16 +9,19 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\ImageEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Sapium\FilamentPackageSapiumWawi\Models\WawiProduct;
+use League\Flysystem\AwsS3V3\PortableVisibilityConverter;
 use Sapium\FilamentPackageSapiumWawi\Models\WawiCategories;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiProductResource\Pages\CreateWawiProduct;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiProductResource\Pages\EditWawiProduct;
@@ -77,7 +80,10 @@ class WawiProductResource extends Resource
                         ->schema([
                             FileUpload::make('image')
                                 ->image()
-                                ->imageEditor()
+                                ->downloadable()
+                                ->preserveFilenames()
+                                ->disk('public') 
+                                ->directory('product_images'),
                         ]),
                 ]),
         ]);
@@ -153,14 +159,12 @@ class WawiProductResource extends Resource
                 ->sortable()
                 ->searchable()
                 ->toggleable(),
-            TextColumn::make('image')
+            ImageColumn::make('image')
                 ->label('Bild')
+                ->defaultImageUrl(url('/storage/product_images/placeholder.png'))
                 ->sortable()
                 ->searchable()
-                ->toggleable(isToggledHiddenByDefault: true)
-                ->sortable()
-                ->searchable()
-                ->toggleable(),
+                ->toggleable(isToggledHiddenByDefault: true),
         ];
 
         return $table
