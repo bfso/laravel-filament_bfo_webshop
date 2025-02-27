@@ -26,6 +26,7 @@
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.5",
+        "parfaitementweb/filament-country-field": "^2.2",
         "sapium/filament-package_sapium_cart": "dev-main",
         "sapium/filament-package_sapium_checkout": "dev-main",
         "sapium/filament-package_sapium_wawi": "dev-main"
