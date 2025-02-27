@@ -31,7 +31,8 @@ class CartPlugin implements Plugin
     {
         $panel
             ->resources([
-                CartResource::class,
+                //CartResource::class,
+                \Sapium\FilamentPackageSapiumCart\Resources\CartItemResource::class,
             ]);
     }
 }

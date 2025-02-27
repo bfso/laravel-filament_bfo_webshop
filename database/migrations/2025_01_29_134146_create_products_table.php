@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('title'); 
-            $table->string('sku')->unique(); 
-            $table->text('description'); 
-            $table->decimal('price', 8, 2); 
-            $table->timestamps(); 
+            $table->string('title');
+            $table->string('sku')->unique();
+            $table->text('description');
+            $table->text('image')->default("https://cdn.pixabay.com/photo/2024/08/26/23/38/maranhao-sheets-9000410_1280.jpg");
+
+            $table->decimal('price', 8, 2);
+            $table->timestamps();
         });
     }
 
