@@ -31,15 +31,15 @@ class CreateCheckout extends CreateRecord
             ->schema([
                 # Adress and Name fields
                 Group::make([
-                    TextInput::make('first_name')->required(),
-                    TextInput::make('last_name')->required(),
-                    DatePicker::make('birth_date')->required(),
+                    TextInput::make('first_name'),
+                    TextInput::make('last_name'),
+                    DatePicker::make('birth_date'),
                     TextInput::make('email_address')->email()->required(),
-                    TextInput::make('phone_number')->required(),
-                    TextInput::make('street')->required(),
-                    TextInput::make('zip')->required(),
-                    TextInput::make('city')->required(),
-                    Country::make('country')->required(),
+                    TextInput::make('phone_number'),
+                    TextInput::make('street'),
+                    TextInput::make('zip'),
+                    TextInput::make('city'),
+                    Country::make('country'),
                 ])->relationship('customer'),
 
                 Group::make([ 
@@ -69,7 +69,6 @@ class CreateCheckout extends CreateRecord
     {
         $data['end_price'] = 12.5; 
         $data['checkout_customer_id'] = 2;
-        $data['country_id'] = 1;
         return $data;
     }
 }

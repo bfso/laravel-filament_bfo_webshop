@@ -16,6 +16,6 @@ class CheckoutCustomer extends Model
         'street',
         'zip',
         'city',
-        'country_id'
+        'country'
     ];
 }
