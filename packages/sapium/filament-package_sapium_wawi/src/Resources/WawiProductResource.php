@@ -146,25 +146,24 @@ class WawiProductResource extends Resource
                 ->money('CHF')
                 ->sortable()
                 ->searchable()
-                ->toggleable(),
+                ->toggleable(isToggledHiddenByDefault: true),
             TextColumn::make('special_price_from')
                 ->label('Start Spezialpreis')
                 ->date()
                 ->sortable()
                 ->searchable()
-                ->toggleable(),
+                ->toggleable(isToggledHiddenByDefault: true),
             TextColumn::make('special_price_to')
                 ->label('End Spezialpreis')
                 ->date()
                 ->sortable()
                 ->searchable()
-                ->toggleable(),
+                ->toggleable(isToggledHiddenByDefault: true),
             ImageColumn::make('image')
                 ->label('Bild')
-                ->defaultImageUrl(url('/storage/product_images/placeholder.png'))
                 ->sortable()
                 ->searchable()
-                ->toggleable(isToggledHiddenByDefault: true),
+                ->toggleable(),
         ];
 
         return $table
