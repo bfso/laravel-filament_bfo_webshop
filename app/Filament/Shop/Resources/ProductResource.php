@@ -23,7 +23,6 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Table;
 
 class ProductResource extends Resource
 {
