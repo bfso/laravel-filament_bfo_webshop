@@ -10,18 +10,16 @@ return new class extends Migration
     {
         Schema::create('wawi_Supplier', function (Blueprint $table) {
             $table->id();
-            $table->string('product_name');
-            $table->text('product_description')->nullable();
-            $table->float('purchase_price')->nullable();
-            $table->float('product_price');
-            $table->float('special_price')->nullable();
-            $table->date('special_price_from')->nullable();
-            $table->date('special_price_to')->nullable();
-            $table->string('image')->nullable(); 
+            $table->string('supplier_name')->nullable(); 
+            $table->text('supplier_description')->nullable(); 
+            $table->string('phone_number')->nullable(); 
+            $table->string('email')->nullable(); 
+            $table->string('location')->nullable(); 
+            $table->string('contact_person')->nullable(); 
             $table->timestamps();
 
-            // Adding the category_id foreign key field
-            $table->foreignId('category_id')->constrained('wawi_categories')->onDelete('cascade'); // Adds the category_id field and references wawi_categories
+            
+            $table->foreignId('category_id')->constrained('wawi_categories')->onDelete('cascade');
         });
     }
 
