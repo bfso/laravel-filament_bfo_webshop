@@ -81,4 +81,9 @@ class CreateCheckout extends CreateRecord
         $data['checkout_customer_id'] = 2;
         return $data;
     }
+
+
+    protected function afterCreate(): void {
+        redirect()->route('filament.pages.checkout-confirmation');
+    }
 }
