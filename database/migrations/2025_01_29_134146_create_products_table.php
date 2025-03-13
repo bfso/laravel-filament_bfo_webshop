@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('sku')->unique();
             $table->text('description');
-            $table->text('image')->default("https://cdn.pixabay.com/photo/2024/08/26/23/38/maranhao-sheets-9000410_1280.jpg");
+            $table->text('image')->nullable();
 
             $table->decimal('price', 8, 2);
             $table->timestamps();
