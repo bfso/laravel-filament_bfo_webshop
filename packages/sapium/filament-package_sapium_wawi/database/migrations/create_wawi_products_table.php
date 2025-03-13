@@ -18,22 +18,15 @@ return new class extends Migration
             $table->date('special_price_from')->nullable();
             $table->date('special_price_to')->nullable();
             $table->string('image')->nullable(); 
-            // add fields
-    
-                $table->timestamps();
-            });
-            // Schema::create('wawi_customers', function (Blueprint $table) {
-            //     $table->id();
-            //     $table->string('customer_name');
-            //     $table->string('customer_email');
-            //     $table->string('customer_phone');
-            //     $table->string('customer_address');
-            //     $table->string('customer_country');
-            //     $table->string('isSupplier');
-            //     $table->string('isCostumer');
-            //     // add fields
-    
-            //     $table->timestamps();
-            // });
+            $table->timestamps();
+
+            // Adding the category_id foreign key field
+            $table->foreignId('category_id')->constrained('wawi_categories')->onDelete('cascade'); // Adds the category_id field and references wawi_categories
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('wawi_products');
     }
 };

@@ -14,7 +14,7 @@ class EditWawiProduct extends EditRecord
     {
         $record = $this->record;
         \Log::info('WawiProduct edited', ['id' => $record->id, 'product_name' => $record->name]);
-        return "Stock has been updated.";
+        return "Product has been updated.";
     }
 
 }

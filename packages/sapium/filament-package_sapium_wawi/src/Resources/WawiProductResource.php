@@ -9,15 +9,20 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\MarkdownEditor;
+use Filament\Forms\Components\ImageEditor;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Sapium\FilamentPackageSapiumWawi\Models\WawiProduct;
+use League\Flysystem\AwsS3V3\PortableVisibilityConverter;
+use Sapium\FilamentPackageSapiumWawi\Models\WawiCategories;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiProductResource\Pages\CreateWawiProduct;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiProductResource\Pages\EditWawiProduct;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiProductResource\Pages\ListWawiProduct;
@@ -26,7 +31,7 @@ class WawiProductResource extends Resource
 {
 
     protected static ?string $model = WawiProduct::class;
-    protected static ?string $navigationIcon = 'heroicon-o-cube-transparent';
+    protected static ?string $navigationIcon = 'heroicon-o-cube';
 
     public static function form(Form $form): Form
     {
@@ -39,6 +44,23 @@ class WawiProductResource extends Resource
                             TextInput::make('product_name')->required(),
                             MarkdownEditor::make('product_description')
                                 ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList']),
+                            Select::make('category_id')
+                                ->label('Kategorie') 
+                                ->options(
+                                    WawiCategories::all()->mapWithKeys(function ($category) {
+                                        return [
+                                            $category->id => $category->name, 
+                                        ];
+                                    })->toArray()
+                                )
+                                ->extraAttributes(function ($get) {
+                                    $categoryId = $get('category_id'); 
+                                    $category = WawiCategories::find($categoryId);
+                                    return [
+                                        'style' => $category ? 'background-color: ' . $category->color . ';' : '', 
+                                    ];
+                                })
+                                ->required(),
                         ]),
 
                     Tab::make('Prices')
@@ -58,7 +80,10 @@ class WawiProductResource extends Resource
                         ->schema([
                             FileUpload::make('image')
                                 ->image()
-                                ->imageEditor()
+                                ->downloadable()
+                                ->preserveFilenames()
+                                ->disk('public') 
+                                ->directory('product_images'),
                         ]),
                 ]),
         ]);
@@ -83,6 +108,19 @@ class WawiProductResource extends Resource
             TextColumn::make('product_name')
                 ->label('Name')
                 ->sortable()
+                ->searchable(),
+            TextColumn::make('category.name') 
+                ->label('Category')
+                ->getStateUsing(function (WawiProduct $record) {
+                    $category = $record->category;
+                    $color = $category ? $category->color : '#ffffff'; 
+                    $name = $category ? $category->name : 'No Category';
+                    
+                    return "<span style='background-color: {$color}; padding: 5px 10px; border-radius: 15px; color: #ffffff; font-weight: bold; text-transform: uppercase;'>{$name}</span>";
+                })
+                ->html() 
+                ->sortable()
+                ->toggleable()
                 ->searchable(),
             TextColumn::make('product_description')
                 ->label('Beschreibung')
@@ -121,14 +159,12 @@ class WawiProductResource extends Resource
                 ->sortable()
                 ->searchable()
                 ->toggleable(),
-            TextColumn::make('image')
+            ImageColumn::make('image')
                 ->label('Bild')
+                ->defaultImageUrl(url('/storage/product_images/placeholder.png'))
                 ->sortable()
                 ->searchable()
-                ->toggleable(isToggledHiddenByDefault: true)
-                ->sortable()
-                ->searchable()
-                ->toggleable(),
+                ->toggleable(isToggledHiddenByDefault: true),
         ];
 
         return $table
