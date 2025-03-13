@@ -8,4 +8,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/checkout-confirmation-page', CheckoutConfirmationPage::class)->name('filament.pages.checkout-confirmation-page');
+Route::get('', CheckoutConfirmationPage::class)->name('filament.pages.checkout-confirmation-page');

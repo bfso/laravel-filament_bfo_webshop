@@ -60,6 +60,7 @@ class CheckoutResource extends Resource
             'index' => Pages\ListCheckouts::route('/'),
             'create' => Pages\CreateCheckout::route('/create'),
             'edit' => Pages\EditCheckout::route('/{record}/edit'),
+            'confirm' => Pages\CheckoutConfirmationPage::route('/confirm')
         ];
     }
 }
