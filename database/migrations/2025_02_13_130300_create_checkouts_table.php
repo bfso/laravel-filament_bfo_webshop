@@ -20,9 +20,9 @@ return new class extends Migration
             $table->id();
             $table->timestamp('date_time')->nullable(false);
             $table->decimal('end_price', 10, 2)->nullable(false);
-            $table->integer('checkout_customer_id')->nullable(false);
-            $table->integer('delivery_method_id')->nullable(false);
-            $table->integer('payment_method_id')->nullable(false);
+            $table->bigInteger('checkout_customer_id')->nullable(false);
+            $table->bigInteger('delivery_method_id')->nullable(false);
+            $table->bigInteger('payment_method_id')->nullable(false);
             $table->timestamps();
         });
 
@@ -30,8 +30,8 @@ return new class extends Migration
         // Table: order_items
         Schema::create('checkout_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('checkout_id')->nullable(false);
-            $table->integer('original_item_id')->nullable(false);
+            $table->foreignId('checkout_id')->constrained('checkouts')->onDelete('cascade');
+            $table->bigInteger('original_item_id')->nullable(false);
             $table->string('name', 255)->nullable(false);
             $table->text('description')->nullable(true);
             $table->decimal('price', 10, 2)->nullable(false);
@@ -50,7 +50,7 @@ return new class extends Migration
             $table->string('street', 255)->nullable(false);
             $table->string('zip', 255)->nullable(false);
             $table->string('city', 255)->nullable(false);
-            $table->integer('country_id')->nullable(false);
+            $table->bigInteger('country_id')->nullable(false);
             $table->timestamps();
         });
 
@@ -63,9 +63,9 @@ return new class extends Migration
 
 
         // Create foreign keys
-        Schema::table('checkout_items', function (Blueprint $table) {
-            $table->foreign('checkout_id')->references('id')->on('checkouts');
-        });
+//        Schema::table('checkout_items', function (Blueprint $table) {
+//            $table->foreign('checkout_id')->references('id')->on('checkouts');
+//        });
 
     }
 };
