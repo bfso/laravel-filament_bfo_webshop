@@ -56,14 +56,14 @@ class CreateCheckout extends CreateRecord
                             '1'=> 'Post',
                             '2'=> 'Car',
                             '3'=> 'Airplane',
-                        ])->required(),
+                        ])->required()->label('Delivery method'),
     
                         # Payment fields
                         Select::make('payment_method_id')->options([
                             '1'=> 'Credit Card',
                             '2'=> 'Bitcoin',
                             '3'=> 'Monero',
-                        ])->required(),
+                        ])->required()->label('Payment method'),
                     ]),
                 ]),
 

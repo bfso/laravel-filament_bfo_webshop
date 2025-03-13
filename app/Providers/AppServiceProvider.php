@@ -3,7 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-
+use Filament\Support\Assets\Css;
+use Filament\Support\Facades\FilamentAsset;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -12,6 +13,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         //
+        
     }
 
     /**
@@ -19,6 +21,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+
+      FilamentAsset::register([
+        Css::make('custom-stylesheet', __DIR__ . '/../../resources/css/custom.css'),
+    ]);
     }
 }
