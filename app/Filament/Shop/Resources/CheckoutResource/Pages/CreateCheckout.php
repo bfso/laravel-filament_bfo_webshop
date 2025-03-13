@@ -84,6 +84,6 @@ class CreateCheckout extends CreateRecord
 
 
     protected function afterCreate(): void {
-        redirect()->route('filament.pages.checkout-confirmation');
+        redirect()->route('filament.pages.checkout-confirmation-page');
     }
 }
