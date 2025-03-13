@@ -14,6 +14,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Filament\Tables\Actions\RepurchaseAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\Filter;
@@ -121,6 +122,10 @@ class WawiStockResource extends Resource
             ])
             ->actions([
                 EditAction::make(),
+                RepurchaseAction::make('repurchase')
+                    ->data(fn (WawiStock $record): array => [
+                        'stock_name' => $record->description,
+                    ]),
             ])
             ->bulkActions([
                 DeleteBulkAction::make()
