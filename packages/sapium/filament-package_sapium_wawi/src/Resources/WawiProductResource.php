@@ -42,16 +42,17 @@ class WawiProductResource extends Resource
                     Tab::make('General')
                         ->schema([
                             TextInput::make('product_name')->required(),
+                            
                             MarkdownEditor::make('product_description')
-                                ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList']),
+                            ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList']),
                             Select::make('category_id')
-                                ->label('Kategorie') 
-                                ->options(
-                                    WawiCategories::all()->mapWithKeys(function ($category) {
-                                        return [
-                                            $category->id => $category->name, 
-                                        ];
-                                    })->toArray()
+                            ->label('Kategorie') 
+                            ->options(
+                                WawiCategories::all()->mapWithKeys(function ($category) {
+                                    return [
+                                        $category->id => $category->name, 
+                                    ];
+                                })->toArray()
                                 )
                                 ->extraAttributes(function ($get) {
                                     $categoryId = $get('category_id'); 
@@ -60,7 +61,10 @@ class WawiProductResource extends Resource
                                         'style' => $category ? 'background-color: ' . $category->color . ';' : '', 
                                     ];
                                 })
-                                ->required(),
+                                ->required()
+                                ->suffix('erstelle zuerst eine Kategorie!!')
+
+                                
                         ]),
 
                     Tab::make('Prices')

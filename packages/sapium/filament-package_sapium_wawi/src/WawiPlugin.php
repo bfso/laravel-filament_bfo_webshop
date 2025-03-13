@@ -33,9 +33,9 @@ class WawiPlugin implements Plugin
     {
         $panel
             ->resources([
+                WawiCategoriesResource:: class,
                 WawiProductResource::class,
                 WawiStockResource::class,
-                WawiCategoriesResource:: class,
             ]);
     }
 }
