@@ -122,10 +122,7 @@ class WawiStockResource extends Resource
             ])
             ->actions([
                 EditAction::make(),
-                RepurchaseAction::make('repurchase')
-                    ->data(fn (WawiStock $record): array => [
-                        'stock_name' => $record->description,
-                    ]),
+                RepurchaseAction::make('repurchase'),
             ])
             ->bulkActions([
                 DeleteBulkAction::make()
