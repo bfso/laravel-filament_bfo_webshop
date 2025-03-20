@@ -21,6 +21,9 @@ use Sapium\FilamentPackageSapiumWawi\WawiPlugin;
 
 class WawiPanelProvider extends PanelProvider
 {
+
+
+
     public function panel(Panel $panel): Panel
     {
         return $panel
