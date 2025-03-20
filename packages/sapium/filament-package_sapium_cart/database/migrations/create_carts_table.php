@@ -10,10 +10,17 @@ return new class extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
-
-            // add fields
-
+            $table->unsignedBigInteger('user_id'); // Foreign key to users table
+            $table->string('session_id')->nullable(); // Session ID for guest users
             $table->timestamps();
+
+            // Add foreign key constraint
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('carts');
     }
 };
