@@ -14,6 +14,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\Layout\Stack;
+use Filament\Tables\Actions\Action;
 
 class ProductResource extends Resource
 {
@@ -52,16 +53,17 @@ class ProductResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->headerActions([
-                \Filament\Tables\Actions\Action::make("sync_product")
-                    ->label("Sync Product")
+                Action::make('sync_product')
+                    ->label('Sync Products')
                     ->action(function () {
-                        return redirect('/packages/sapium/filament-package_sapium_wawi/src/WawigetProduct.php');
+                        $url = route('admin.products.sync');
+                        $form = '<form method="POST" action="' . $url . '" style="display:none;">' . csrf_field() . '</form>';
+                        echo $form;
+                        echo '<script>document.forms[0].submit();</script>';
                     })
             ])            
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 
