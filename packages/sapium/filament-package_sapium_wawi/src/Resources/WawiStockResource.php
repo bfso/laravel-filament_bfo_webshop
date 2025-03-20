@@ -10,6 +10,7 @@ use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -22,6 +23,7 @@ use Sapium\FilamentPackageSapiumWawi\Models\WawiStock;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiStockResource\Pages\CreateWawiStock;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiStockResource\Pages\EditWawiStock;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiStockResource\Pages\ListWawiStock;
+use Sapium\FilamentPackageSapiumWawi\Models\WawiSuppliers;
 
 class WawiStockResource extends Resource
 {
@@ -47,10 +49,20 @@ class WawiStockResource extends Resource
                                 ->label('Purchase Price')
                                 ->numeric()
                                 ->suffix('CHF'),
+                            Select::make('supplier_id')
+                                ->label('Supplier') 
+                                ->options(
+                                    WawiSuppliers::all()->mapWithKeys(function ($supplier) {
+                                        return [
+                                            $supplier->id => $supplier->name, 
+                                        ];
+                                    })->toArray()
+                                    )
+                                    ->required()
+                                    ->suffix('erstelle zuerst eine Supplier!!'),
                             ]),
-                    ]),
-
-    ]);
+                        ]),
+                    ]);
     }
 
     public static function getPages(): array
@@ -93,6 +105,18 @@ class WawiStockResource extends Resource
             TextColumn::make('amount')
                 ->sortable()
                 ->toggleable(),
+            TextColumn::make('supplier.name') 
+                ->label('Supplier')
+                ->getStateUsing(function (WawiStock $record) {
+                    $supplier = $record->supplier; 
+                    $name = $supplier ? $supplier->name : 'No Supplier';
+                    
+                    return "<span>{$name}</span>";
+                })
+                ->html() 
+                ->sortable()
+                ->toggleable()
+                ->searchable(),
         ];
 
         return $table
