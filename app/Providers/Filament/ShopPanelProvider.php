@@ -6,6 +6,8 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Sapium\FilamentPackageSapiumCart\CartPlugin;
+use Sapium\FilamentPackageSapiumCheckout\CheckoutPlugin;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -41,6 +43,10 @@ class ShopPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
+            ])
+            ->plugins([
+                CartPlugin::make(),
+                CheckoutPlugin::make(),
             ])
             ->middleware([
                 EncryptCookies::class,

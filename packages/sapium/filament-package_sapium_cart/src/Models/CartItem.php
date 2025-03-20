@@ -4,23 +4,21 @@ namespace Sapium\FilamentPackageSapiumCart\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Cart extends Model
+class CartItem extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'id',
+        'cart_id',
+        'product_id',
         'quantity',
+        'options',
     ];
 
-    public function updateQuantity(int $quantity): void
-    {
-        $this->quantity = max(1, $quantity);
-        $this->save();
-    }
-  
-    public function cartItems() : HasMany {
-        return $this->hasMany(CartItems::class);
+    public function cart() : BelongsTo {
+        return $this->belongsTo(Cart::class);
     } 
 }

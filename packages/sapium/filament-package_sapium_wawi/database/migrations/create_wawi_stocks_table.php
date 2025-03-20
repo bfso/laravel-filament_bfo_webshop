@@ -9,13 +9,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('wawi_stocks', function (Blueprint $table) {
-                $table->id();
-                $table->string('color');
-                $table->text('description')->nullable();
-                $table->float('price')->nullable();
-                $table->integer('amount')->nullable();
-                $table->timestamps();
-            });
+            $table->id();
+            $table->string('color');
+            $table->text('description')->nullable();
+            $table->float('price')->nullable();
+            $table->integer('amount')->nullable();
+            $table->foreignId('supplier_id')->constrained('wawi_suppliers')->onDelete('cascade'); 
+            $table->timestamps();
+        });
 
     }
 };
