@@ -2,16 +2,16 @@
 
 namespace Sapium\FilamentPackageSapiumCart\Resources;
 
-use Sapium\FilamentPackageSapiumCart\Resources\Pages;
+use Sapium\FilamentPackageSapiumCart\Resources\CartItemResource\Pages\ListCartItems; 
 use Filament\Forms;
 use Filament\Forms\Form;
 use Sapium\FilamentPackageSapiumCart\Models\CartItem;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Sapium\FilamentPackageSapiumCart\Resources\Pages\ListCartItems;
 
 class CartItemResource extends Resource
 {
@@ -20,8 +20,6 @@ class CartItemResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationLabel = 'Cart';
     protected static ?string $pluralModelLabel = 'Cart';
-
-
 
     public static function form(Form $form): Form
     {
@@ -35,7 +33,15 @@ class CartItemResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('product.title')
+                    ->label('Produktname')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('product.price')
+                    ->label('Preis')
+                    ->money('CHF')
+                    ->sortable(),
             ])
             ->filters([
                 //
@@ -60,7 +66,7 @@ class CartItemResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => \Sapium\FilamentPackageSapiumCart\Resources\CartItemResource\Pages\ListCartItems::route('/'),
+            'index' => ListCartItems::route('/'),
         ];
     }
 }
