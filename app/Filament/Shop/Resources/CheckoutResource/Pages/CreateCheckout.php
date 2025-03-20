@@ -53,16 +53,14 @@ class CreateCheckout extends CreateRecord
                     Group::make([ 
                         # Delivery method
                         Select::make('delivery_method_id')->options([
-                            '1'=> 'Post',
-                            '2'=> 'Car',
-                            '3'=> 'Airplane',
+                            '1'=> 'Post-Pack Budget 9.- (4 Tage)',
+                            '2'=> 'DHL 15.- (2 Tage)',
                         ])->required()->label('Delivery method'),
     
                         # Payment fields
                         Select::make('payment_method_id')->options([
-                            '1'=> 'Credit Card',
-                            '2'=> 'Bitcoin',
-                            '3'=> 'Monero',
+                            '1'=> 'Twint',
+                            '2'=> 'Vorauskasse',
                         ])->required()->label('Payment method'),
                     ]),
                 ]),
