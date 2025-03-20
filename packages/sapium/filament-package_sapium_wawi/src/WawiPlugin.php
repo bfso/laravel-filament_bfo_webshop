@@ -36,8 +36,8 @@ class WawiPlugin implements Plugin
             ->resources([
                 WawiCategoriesResource:: class,
                 WawiProductResource::class,
-                WawiStockResource::class,
                 WawiSuppliersResource::class,
+                WawiStockResource::class,
             ]);
     }
 }
