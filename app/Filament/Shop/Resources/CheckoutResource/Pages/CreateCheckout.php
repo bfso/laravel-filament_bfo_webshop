@@ -5,6 +5,7 @@ namespace App\Filament\Shop\Resources\CheckoutResource\Pages;
 use App\Filament\Shop\Resources\CheckoutResource;
 use App\Models\CheckoutCountry;
 use Filament\Actions;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Group;
@@ -63,6 +64,17 @@ class CreateCheckout extends CreateRecord
                             '2'=> 'Vorauskasse',
                         ])->required()->label('Payment method'),
                     ]),
+                ]),
+
+
+                Section::make("Terms and Conditions")
+                ->description("Please accept the terms and conditions")
+                ->schema([
+                    Group::make([
+                        // Checkbox
+                        Checkbox::make('accept_terms_and_contitions')
+                        ->accepted()->label('I accept the terms and conditions')
+                    ])
                 ]),
 
 
