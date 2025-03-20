@@ -11,7 +11,6 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
-use App\Providers\Filament\Wawi\Widgets\WawiProductTableWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -22,12 +21,7 @@ use Sapium\FilamentPackageSapiumWawi\WawiPlugin;
 
 class WawiPanelProvider extends PanelProvider
 {
-    public function getWidgets(): array
-    {
-        return [
-            WawiProductTableWidget::class,
-        ];
-    }
+
 
 
     public function panel(Panel $panel): Panel
