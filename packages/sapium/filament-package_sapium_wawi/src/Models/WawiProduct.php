@@ -25,8 +25,8 @@ class WawiProduct extends Model
     ];
 
     // Define the relationship with WawiCategories
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(WawiCategories::class, 'category_id'); // Assuming 'category_id' is the foreign key in wawi_products
+        return $this->belongsToMany(WawiCategories::class, 'product_category', 'product_id', 'category_id');
     }
 }
