@@ -20,8 +20,6 @@ return new class extends Migration
             $table->string('image')->nullable(); 
             $table->timestamps();
 
-            // Adding the category_id foreign key field
-            $table->foreignId('category_id')->constrained('wawi_categories')->onDelete('cascade'); // Adds the category_id field and references wawi_categories
         });
     }
 

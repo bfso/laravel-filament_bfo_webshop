@@ -45,24 +45,29 @@ class WawiProductResource extends Resource
                             
                             MarkdownEditor::make('product_description')
                             ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList']),
-                            Select::make('category_id')
-                            ->label('Kategorie') 
+                            Select::make('category_ids')
+                            ->label('Kategorien') 
                             ->options(
                                 WawiCategories::all()->mapWithKeys(function ($category) {
                                     return [
-                                        $category->id => $category->name, 
+                                        $category->id => $category->name,
                                     ];
                                 })->toArray()
-                                )
-                                ->extraAttributes(function ($get) {
-                                    $categoryId = $get('category_id'); 
-                                    $category = WawiCategories::find($categoryId);
-                                    return [
-                                        'style' => $category ? 'background-color: ' . $category->color . ';' : '', 
-                                    ];
-                                })
+                            )
+                            ->extraAttributes(function ($get) {
+                                $categoryId = $get('category_id'); // or 'category_ids' based on your form field
+                                $category = WawiCategories::find($categoryId);
+                        
+                                // Always return an array, even if $category is null
+                                return $category ? [
+                                    'data-category-name' => $category->name,
+                                ] : []; // Return an empty array if no category found
+                            })
+                        
+                                ->multiple()  // Enable multiple select
                                 ->required()
-                                ->suffix('erstelle zuerst eine Kategorie!!')
+                                ->suffix('Wähle mindestens eine Kategorie!')
+
 
                                 
                         ]),
@@ -114,18 +119,34 @@ class WawiProductResource extends Resource
                 ->sortable()
                 ->searchable(),
             TextColumn::make('category.name') 
-                ->label('Category')
+                ->label('Categories')
                 ->getStateUsing(function (WawiProduct $record) {
-                    $category = $record->category;
-                    $color = $category ? $category->color : '#ffffff'; 
-                    $name = $category ? $category->name : 'No Category';
-                    
-                    return "<span style='background-color: {$color}; padding: 5px 10px; border-radius: 15px; color: #ffffff; font-weight: bold; text-transform: uppercase;'>{$name}</span>";
+                    // Get all categories associated with the product
+                    $categories = $record->categories;
+            
+                    // Check if categories exist (not null or empty)
+                    if ($categories && $categories->isNotEmpty()) {
+                        // Prepare an array to hold the HTML for category names and colors
+                        $categoryList = $categories->map(function ($category) {
+                            // Check if the category has a color, otherwise default to white
+                            $color = $category->color ?? '#ffffff';
+                            // Return a span element with the category's color
+                            return "<span style='color: {$color};'>{$category->name}</span>";
+                        })->toArray();
+            
+                        // Join all category names into a single string
+                        return implode(', ', $categoryList);
+                    }
+            
+                    // If no categories exist, return a default message
+                    return 'No Categories';
                 })
-                ->html() 
+                ->html()  // Render HTML
                 ->sortable()
                 ->toggleable()
                 ->searchable(),
+            
+            
             TextColumn::make('product_description')
                 ->label('Beschreibung')
                 ->sortable()
@@ -156,13 +177,13 @@ class WawiProductResource extends Resource
                 ->date()
                 ->sortable()
                 ->searchable()
-                ->toggleable(),
+                ->toggleable(isToggledHiddenByDefault: true),
             TextColumn::make('special_price_to')
                 ->label('End Spezialpreis')
                 ->date()
                 ->sortable()
                 ->searchable()
-                ->toggleable(),
+                ->toggleable(isToggledHiddenByDefault: true),
             ImageColumn::make('image')
                 ->label('Bild')
                 ->defaultImageUrl(url('/storage/product_images/placeholder.png'))
