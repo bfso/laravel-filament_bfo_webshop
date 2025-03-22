@@ -21,6 +21,7 @@ class WawiProduct extends Model
         'special_price_from',
         'special_price_to',
         'image',
+        'sku',
         'category_id', // Add the category_id to the fillable array
     ];
 

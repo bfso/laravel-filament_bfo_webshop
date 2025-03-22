@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
+use Faker\Factory as Faker;
 
 class WawiProductsSeeder extends Seeder
 {
@@ -15,6 +16,9 @@ class WawiProductsSeeder extends Seeder
         if (!Schema::hasTable('wawi_products')) {
             return;
         }
+
+        // Faker initialisieren
+        $faker = Faker::create();
 
         // Beispielkategorien abrufen
         $categoryIds = DB::table('wawi_categories')->pluck('id');
@@ -34,6 +38,7 @@ class WawiProductsSeeder extends Seeder
                 'special_price_from' => Carbon::now()->subDays(3),
                 'special_price_to' => Carbon::now()->addDays(7),
                 'image' => 'samsung_s23.jpg',
+                'sku' => strtoupper($faker->unique()->lexify('?????') . $faker->regexify('[A-Z0-9]{4}')),
                 'category_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now()
@@ -47,6 +52,7 @@ class WawiProductsSeeder extends Seeder
                 'special_price_from' => Carbon::now()->subDays(2),
                 'special_price_to' => Carbon::now()->addDays(5),
                 'image' => 'iphone_14.jpg',
+                'sku' => strtoupper($faker->unique()->lexify('?????') . $faker->regexify('[A-Z0-9]{4}')),
                 'category_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now()
@@ -60,6 +66,7 @@ class WawiProductsSeeder extends Seeder
                 'special_price_from' => Carbon::now()->subDays(7),
                 'special_price_to' => Carbon::now()->addDays(14),
                 'image' => 'sony_wh1000xm5.jpg',
+                'sku' => strtoupper($faker->unique()->lexify('?????') . $faker->regexify('[A-Z0-9]{4}')),
                 'category_id' => 4,
                 'created_at' => now(),
                 'updated_at' => now()
@@ -73,6 +80,7 @@ class WawiProductsSeeder extends Seeder
                 'special_price_from' => null,
                 'special_price_to' => null,
                 'image' => 'dell_xps13.jpg',
+                'sku' => strtoupper($faker->unique()->lexify('?????') . $faker->regexify('[A-Z0-9]{4}')),
                 'category_id' => 2,
                 'created_at' => now(),
                 'updated_at' => now()
@@ -86,6 +94,7 @@ class WawiProductsSeeder extends Seeder
                 'special_price_from' => Carbon::now()->subDays(10),
                 'special_price_to' => Carbon::now()->addDays(10),
                 'image' => 'lg_oled_c2.jpg',
+                'sku' => strtoupper($faker->unique()->lexify('?????') . $faker->regexify('[A-Z0-9]{4}')),
                 'category_id' => 3,
                 'created_at' => now(),
                 'updated_at' => now()

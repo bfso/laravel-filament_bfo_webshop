@@ -41,7 +41,9 @@ class WawiProductResource extends Resource
                             TextInput::make('product_name')
                                 ->required()
                                 ->label('Produktname'),
-                            
+                            TextInput::make('sku')
+                                ->label('Artikelnummer')
+                                ->prefix('SKU-'),
                             // Markdown-Editor für Produktbeschreibung
                             MarkdownEditor::make('product_description')
                                 ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList'])
@@ -119,6 +121,7 @@ class WawiProductResource extends Resource
         $tableComponents = [
             TextColumn::make('id')->sortable(),
             TextColumn::make('product_name')->label('Produktname')->sortable()->searchable(),
+            TextColumn::make('sku')->label('Artikelnummer')->sortable()->searchable()->formatStateUsing(fn ($state) => 'SKU-' . $state),
 
             // Kategorie mit Farbanzeige in HTML
             TextColumn::make('category.name') 
@@ -146,7 +149,7 @@ class WawiProductResource extends Resource
                 TextColumn::make('product_description')->label('Produktbeschreibung')->sortable()->searchable()->wrap()->limit(50)->markdown(),
                 TextColumn::make('purchase_price')->label('Kaufpreis')->money('CHF')->sortable()->searchable()->toggleable(),
                 TextColumn::make('product_price')->label('Verkaufpreis')->money('CHF')->sortable()->searchable()->toggleable(),
-                TextColumn::make('special_price')->label('Spezialpreis')->money('CHF')->sortable()->searchable()->toggleable(),
+                TextColumn::make('special_price')->label('Spezialpreis')->money('CHF')->sortable()->searchable()->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('special_price_from')->label('Startdatum Spezialpreis')->date()->sortable()->searchable()->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('special_price_to')->label('Enddatum Spezialpreis')->date()->sortable()->searchable()->toggleable(isToggledHiddenByDefault: true),
                 ImageColumn::make('image')->label('Bild')->defaultImageUrl(url('/storage/product_images/placeholder.png'))->sortable()->searchable()->toggleable(isToggledHiddenByDefault: true),

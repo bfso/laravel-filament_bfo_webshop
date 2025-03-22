@@ -17,7 +17,8 @@ return new class extends Migration
             $table->float('special_price')->nullable();
             $table->date('special_price_from')->nullable();
             $table->date('special_price_to')->nullable();
-            $table->string('image')->nullable(); 
+            $table->string('image')->nullable();
+            $table->string('sku')->unique(); 
             $table->timestamps();
 
         });
