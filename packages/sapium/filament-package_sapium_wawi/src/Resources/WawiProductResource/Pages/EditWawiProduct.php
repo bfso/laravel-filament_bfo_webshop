@@ -16,5 +16,8 @@ class EditWawiProduct extends EditRecord
         \Log::info('WawiProduct edited', ['id' => $record->id, 'product_name' => $record->name]);
         return "Product has been updated.";
     }
+    protected function getRedirectUrl(): string{
+        return WawiProductResource::getUrl('index');
+    }
 
 }

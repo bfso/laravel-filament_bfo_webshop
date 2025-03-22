@@ -34,42 +34,42 @@ class WawiSuppliersResource extends Resource
             Tabs::make('Product Details')
                 ->columnSpan('full')
                 ->tabs([
-                    Tab::make('General')
+                    Tab::make('Allgemein')
                         ->schema([
                             TextInput::make('name')
                             ->label('Name')
                             ->required()
                             ->maxLength(255),
                         
-                        MarkdownEditor::make('description')
-                            ->label('Beschreibung')
-                            ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList'])
-                            ->nullable(),
+                            MarkdownEditor::make('description')
+                                ->label('Beschreibung')
+                                ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList'])
+                                ->nullable(),
+                        ]),
+                    Tab::make('Kontaktinformationen')
+                        ->schema([
+                            TextInput::make('phone')
+                                ->label('Telefon')
+                                ->tel() 
+                                ->rule('regex:/(\b(0041|0)|\B\+41)(\s?\(0\))?(\s)?[1-9]{2}(\s)?[0-9]{3}(\s)?[0-9]{2}(\s)?[0-9]{2}\b/') 
+                                ->nullable()
+                                ->numeric(),
+                            
+                            TextInput::make('email')
+                                ->label('E-Mail')
+                                ->email(),
+                            
+                            TextInput::make('location')
+                                ->label('Standort')
+                                ->maxLength(255)
+                                ->nullable(),
+                            
+                            TextInput::make('contact_person')
+                                ->label('Kontaktperson')
+                                ->maxLength(255)
+                                ->nullable(),
                         
                         ]),
-                        Tab::make('Kontaktinformationen')
-                        ->schema([
-                        TextInput::make('phone')
-                            ->label('Telefon')
-                            ->tel() 
-                            ->rule('regex:/(\b(0041|0)|\B\+41)(\s?\(0\))?(\s)?[1-9]{2}(\s)?[0-9]{3}(\s)?[0-9]{2}(\s)?[0-9]{2}\b/') 
-                            ->nullable(),
-                        
-                        TextInput::make('email')
-                            ->label('E-Mail')
-                            ->email(),
-                        
-                        TextInput::make('location')
-                            ->label('Standort')
-                            ->maxLength(255)
-                            ->nullable(),
-                        
-                        TextInput::make('contact_person')
-                            ->label('Kontaktperson')
-                            ->maxLength(255)
-                            ->nullable(),
-                        
-                    ]),
                 ]),
         ]);
     }
@@ -108,14 +108,15 @@ class WawiSuppliersResource extends Resource
                 ->toggleable(),
             TextColumn::make('email')
                 ->sortable()
-                ->toggleable(),
+                ->toggleable()
+                ->label('E-Mail'),
             TextColumn::make('location')
-            ->label('Standort')
+                ->label('Standort')
                 ->sortable()
                 ->searchable()
                 ->toggleable(),
             TextColumn::make('contact_person')
-            ->label('Kontaktperson')
+                ->label('Kontaktperson')
                 ->sortable()
                 ->searchable()
                 ->toggleable(),
