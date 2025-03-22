@@ -36,14 +36,16 @@ class WawiCategoriesResource extends Resource
             Tabs::make('Product Details')
                 ->columnSpan('full')
                 ->tabs([
-                    Tab::make('General')
+                    Tab::make('Allgemein')
                         ->schema([
                             TextInput::make('name')
                                 ->required(),
                             MarkdownEditor::make('description')
-                                ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList']),
+                                ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList'])
+                                ->label('Beschreibung'),
                             ColorPicker::make('color')
-                                ->required(),
+                                ->required()
+                                ->label('Farbe'),
                          ]),
                 ]),
     ]);

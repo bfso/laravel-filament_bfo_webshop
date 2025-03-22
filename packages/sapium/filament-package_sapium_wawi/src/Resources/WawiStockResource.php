@@ -37,20 +37,23 @@ class WawiStockResource extends Resource
             Tabs::make('Product Details')
                 ->columnSpan('full')
                 ->tabs([
-                    Tab::make('General')
+                    Tab::make('Allgemein')
                         ->schema([
                             ColorPicker::make('color')
-                                ->required(),
+                                ->required()
+                                ->label('Farbe'),
                             MarkdownEditor::make('description')
-                                ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList']),
+                                ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList'])
+                                ->label('Beschreibung'),
                             TextInput::make('amount')
-                                ->numeric(),
+                                ->numeric()
+                                ->label('Menge'),
                             TextInput::make('price')
-                                ->label('Purchase Price')
+                                ->label('Kaufpreis')
                                 ->numeric()
                                 ->suffix('CHF'),
                             Select::make('supplier_id')
-                                ->label('Supplier') 
+                                ->label('Verleiher') 
                                 ->options(
                                     WawiSuppliers::all()->mapWithKeys(function ($supplier) {
                                         return [
@@ -82,7 +85,7 @@ class WawiStockResource extends Resource
             TextColumn::make('id')
                 ->sortable(),
             TextColumn::make('color')
-                ->label('Color')
+                ->label('Farbe')
                 ->sortable()
                 ->searchable()
                 ->formatStateUsing(function ($state) {
@@ -104,9 +107,10 @@ class WawiStockResource extends Resource
                 ->toggleable(),
             TextColumn::make('amount')
                 ->sortable()
-                ->toggleable(),
+                ->toggleable()
+                ->label('Menge'),
             TextColumn::make('supplier.name') 
-                ->label('Supplier')
+                ->label('Verleiher')
                 ->getStateUsing(function (WawiStock $record) {
                     $supplier = $record->supplier; 
                     $name = $supplier ? $supplier->name : 'No Supplier';
@@ -127,11 +131,11 @@ class WawiStockResource extends Resource
                         TextInput::make('amount_from')
                             ->numeric()
                             ->placeholder('Min. amount')
-                            ->label('Min. amount'),
+                            ->label('Min. Menge'),
                         TextInput::make('amount_to')
                             ->numeric()
                             ->placeholder('Max. amount')
-                            ->label('Max. amount'),
+                            ->label('Max. Menge'),
                     ])
                     ->query(function (Builder $query, array $data) {
                         return $query->when(
