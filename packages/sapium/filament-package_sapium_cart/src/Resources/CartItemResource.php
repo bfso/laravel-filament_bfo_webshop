@@ -24,9 +24,16 @@ class CartItemResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                //
-            ]);
+        ->schema([
+            Forms\Components\Select::make('quantity')
+                ->options([
+                    49 => '49',
+                    64 => '64',
+                    81 => '81',
+                ])
+                ->required()
+                ->native(false),
+        ]);
     }
 
     public static function table(Table $table): Table
@@ -41,6 +48,9 @@ class CartItemResource extends Resource
                 TextColumn::make('product.price')
                     ->label('Preis')
                     ->money('CHF')
+                    ->sortable(),
+                TextColumn::make('quantity')
+                    ->label('Menge')
                     ->sortable(),
             ])
             ->filters([
