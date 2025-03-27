@@ -19,9 +19,9 @@ return new class extends Migration
         Schema::create('checkouts', function (Blueprint $table) {
             $table->id();
             $table->decimal('end_price', 10, 2)->nullable(false);
-            $table->foreignId('checkout_customer_id')->nullable(false);
-            $table->foreignId('delivery_method_id')->nullable();
-            $table->foreignId('payment_method_id')->nullable();
+            $table->bigInteger('checkout_customer_id')->nullable(false);
+            $table->bigInteger('delivery_method_id')->nullable(false);
+            $table->bigInteger('payment_method_id')->nullable(false);
             $table->timestamps();
         });
 
@@ -29,8 +29,8 @@ return new class extends Migration
         // Table: order_items
         Schema::create('checkout_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('checkout_id')->nullable(false);
-            $table->integer('original_item_id')->nullable(false);
+            $table->foreignId('checkout_id')->constrained('checkouts')->onDelete('cascade');
+            $table->bigInteger('original_item_id')->nullable(false);
             $table->string('name', 255)->nullable(false);
             $table->text('description')->nullable(true);
             $table->decimal('price', 10, 2)->nullable(false);
@@ -46,17 +46,17 @@ return new class extends Migration
             $table->date('birth_date')->nullable(true);
             $table->string('email_address', 255)->nullable(true);
             $table->string('phone_number', 255)->nullable(true);
-            $table->string('street', 255)->nullable(true);
-            $table->string('zip', 255)->nullable(true);
-            $table->string('city', 255)->nullable(true);
-            $table->string('country')->nullable(true);
+            $table->string('street', 255)->nullable(false);
+            $table->string('zip', 255)->nullable(false);
+            $table->string('city', 255)->nullable(false);
+            $table->bigInteger('country_id')->nullable(false);
             $table->timestamps();
         });
 
         // Create foreign keys
-        Schema::table('checkout_items', function (Blueprint $table) {
-            $table->foreign('checkout_id')->references('id')->on('checkouts');
-        });
+//        Schema::table('checkout_items', function (Blueprint $table) {
+//            $table->foreign('checkout_id')->references('id')->on('checkouts');
+//        });
 
     }
 };
