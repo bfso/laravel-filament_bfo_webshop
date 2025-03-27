@@ -55,11 +55,19 @@ class ProductResource extends Resource
             ->headerActions([
                 Action::make('sync_product')
                     ->label('Sync Products')
-                    ->action(function () {
-                        $url = route('admin.products.sync');
-                        $form = '<form method="POST" action="' . $url . '" style="display:none;">' . csrf_field() . '</form>';
-                        echo $form;
-                        echo '<script>document.forms[0].submit();</script>';
+                    ->action(function () { dd('Sync Products'); 
+                        $url = "http://127.0.0.1:8000/v1/products";
+                        $cURLConnection = curl_init();
+
+                        curl_setopt($cURLConnection, CURLOPT_URL, $url);
+                        curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
+
+                        $phoneList = curl_exec($cURLConnection);
+                        curl_close($cURLConnection);
+
+                        $jsonArrayResponse - json_decode($phoneList);
+                        dd($jsonArrayResponse);
+
                     })
             ])            
             ->bulkActions([
