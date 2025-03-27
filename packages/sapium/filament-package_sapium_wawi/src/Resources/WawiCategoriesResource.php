@@ -4,8 +4,6 @@ namespace Sapium\FilamentPackageSapiumWawi\Resources;
 
 
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\MarkdownEditor;
@@ -16,8 +14,6 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Tables\Filters\Filter;
-use Illuminate\Database\Eloquent\Builder;
 use Sapium\FilamentPackageSapiumWawi\Models\WawiCategories;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiCategoriesResource\Pages\CreateWawiCategories;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiCategoriesResource\Pages\EditWawiCategories;
@@ -36,14 +32,16 @@ class WawiCategoriesResource extends Resource
             Tabs::make('Product Details')
                 ->columnSpan('full')
                 ->tabs([
-                    Tab::make('General')
+                    Tab::make('Allgemein')
                         ->schema([
                             TextInput::make('name')
                                 ->required(),
                             MarkdownEditor::make('description')
-                                ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList']),
+                                ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList'])
+                                ->label('Beschreibung'),
                             ColorPicker::make('color')
-                                ->required(),
+                                ->required()
+                                ->label('Farbe'),
                          ]),
                 ]),
     ]);
