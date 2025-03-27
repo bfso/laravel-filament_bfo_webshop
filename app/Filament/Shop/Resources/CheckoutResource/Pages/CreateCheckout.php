@@ -11,6 +11,7 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -20,11 +21,33 @@ use Illuminate\Support\Facades\Date;
 use Livewire\Attributes\Title;
 use Livewire\Features\SupportPageComponents\BaseTitle;
 use Parfaitementweb\FilamentCountryField\Forms\Components\Country;
+use App\Models\Cart;
 
 
 class CreateCheckout extends CreateRecord
 {
     protected static string $resource = CheckoutResource::class;
+
+
+    private int $cart_id;
+
+
+    /**
+     * Constructor
+     *
+     * @param [type] ...$args
+     */
+    public function __construct(...$args) {
+        // Get cart id
+        $user = auth()->id();
+        $test = auth();
+        echo '<pre>';var_dump($test);
+        $cart_id = Cart::where("user_id", $user)->first()->id;
+        $this->cart_id = $cart_id;
+        die($cart_id);
+
+        parent::__construct(...$args);
+    }
 
     
     public function form(Form $form): Form
@@ -45,6 +68,7 @@ class CreateCheckout extends CreateRecord
                         TextInput::make('zip'),
                         TextInput::make('city'),
                         Country::make('country'),
+                        Hidden::make('cart_id')->default($this->cart_id)
                     ])->relationship('customer'),
                 ]),
 
