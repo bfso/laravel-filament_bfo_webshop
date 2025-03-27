@@ -43,6 +43,7 @@ class WawiProductResource extends Resource
                                 ->label('Produktname'),
                             TextInput::make('sku')
                                 ->label('Artikelnummer')
+                                ->required()
                                 ->disabled(fn ($livewire) => $livewire instanceof EditRecord)
                                 ->prefix('SKU-'),
                             // Markdown-Editor für Produktbeschreibung
@@ -54,6 +55,7 @@ class WawiProductResource extends Resource
                             Select::make('categories')
                                 ->label('Kategorien')
                                 ->multiple()
+                                ->required()
                                 ->relationship('categories', 'name')
                                 ->preload()
                                 ->searchable()
@@ -86,10 +88,15 @@ class WawiProductResource extends Resource
 
                     Tab::make('Spezialpreis')
                         ->schema([
-                            DatePicker::make('special_price_from')->label('Startdatum'),
+                            DatePicker::make('special_price_from')
+                                ->label('Startdatum')
+                                ->minDate('1970-01-01')
+                                ->maxDate('2025-12-31'),
                             DatePicker::make('special_price_to')
                                 ->afterOrEqual('special_price_from')
-                                ->label('Enddatum'),
+                                ->label('Enddatum')
+                                ->minDate('1970-01-01')
+                                ->maxDate('2025-12-31'),
                         ]),
 
                     Tab::make('Bild')
