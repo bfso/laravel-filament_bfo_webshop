@@ -21,12 +21,13 @@ class WawiProduct extends Model
         'special_price_from',
         'special_price_to',
         'image',
+        'sku',
         'category_id', // Add the category_id to the fillable array
     ];
 
     // Define the relationship with WawiCategories
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(WawiCategories::class, 'category_id'); // Assuming 'category_id' is the foreign key in wawi_products
+        return $this->belongsToMany(WawiCategories::class, 'product_category', 'product_id', 'category_id');
     }
 }

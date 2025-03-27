@@ -10,7 +10,11 @@ class ProductController
 { 
     public function index()
     {
-        $products = WawiProduct::with('category')->get();
+        // Lade Produkte mit ihren zugehörigen Kategorien
+        $products = WawiProduct::with('categories')->get(); // 'categories' für viele Kategorien
+    
+        // Gebe die Produkte als JSON zurück
         return response()->json($products);
     }
+    
 }
