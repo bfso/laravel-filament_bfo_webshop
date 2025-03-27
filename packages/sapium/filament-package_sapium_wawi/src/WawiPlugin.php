@@ -7,6 +7,7 @@ use Filament\Panel;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiProductResource;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiStockResource;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiCategoriesResource;
+use Sapium\FilamentPackageSapiumWawi\Resources\WawiSuppliersResource;
 
 class WawiPlugin implements Plugin
 {
@@ -36,6 +37,7 @@ class WawiPlugin implements Plugin
                 WawiCategoriesResource:: class,
                 WawiProductResource::class,
                 WawiStockResource::class,
+                WawiSuppliersResource::class,
             ]);
     }
 }
