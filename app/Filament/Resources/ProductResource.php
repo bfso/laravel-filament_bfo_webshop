@@ -55,21 +55,33 @@ class ProductResource extends Resource
             ->headerActions([
                 Action::make('sync_product')
                     ->label('Sync Products')
-                    ->action(function () { dd('Sync Products'); 
-                        $url = "http://127.0.0.1:8000/v1/products";
+                    ->action(function () {
+                        $url = "http://localhost/v1/products";
                         $cURLConnection = curl_init();
 
                         curl_setopt($cURLConnection, CURLOPT_URL, $url);
                         curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
 
-                        $phoneList = curl_exec($cURLConnection);
+                        $wawiProductsJson = curl_exec($cURLConnection);
                         curl_close($cURLConnection);
 
-                        $jsonArrayResponse - json_decode($phoneList);
-                        dd($jsonArrayResponse);
+                        $jsonArrayResponse = json_decode($wawiProductsJson, true);
+
+                        foreach ($jsonArrayResponse as $wawiProduct) {
+                            Product::query()->upsert(
+                                [
+                                    'sku' => $wawiProduct['sku'],
+                                    'title' => $wawiProduct['product_name'],
+                                    'description' => $wawiProduct['product_description'],
+                                    'price' => $wawiProduct['product_price'],
+                                ],['sku']
+                            );
+                        }
+
+                        // dd($jsonArrayResponse);
 
                     })
-            ])            
+            ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);

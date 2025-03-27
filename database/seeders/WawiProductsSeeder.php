@@ -39,7 +39,7 @@ class WawiProductsSeeder extends Seeder
                 'special_price_to' => Carbon::now()->addDays(7),
                 'image' => 'samsung_s23.jpg',
                 'sku' => strtoupper($faker->unique()->lexify('?????') . $faker->regexify('[A-Z0-9]{4}')),
-                'category_id' => 1,
+                //'category_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -53,7 +53,7 @@ class WawiProductsSeeder extends Seeder
                 'special_price_to' => Carbon::now()->addDays(5),
                 'image' => 'iphone_14.jpg',
                 'sku' => strtoupper($faker->unique()->lexify('?????') . $faker->regexify('[A-Z0-9]{4}')),
-                'category_id' => 1,
+                //'category_id' => 1,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -67,7 +67,7 @@ class WawiProductsSeeder extends Seeder
                 'special_price_to' => Carbon::now()->addDays(14),
                 'image' => 'sony_wh1000xm5.jpg',
                 'sku' => strtoupper($faker->unique()->lexify('?????') . $faker->regexify('[A-Z0-9]{4}')),
-                'category_id' => 4,
+                //'category_id' => 4,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -81,7 +81,7 @@ class WawiProductsSeeder extends Seeder
                 'special_price_to' => null,
                 'image' => 'dell_xps13.jpg',
                 'sku' => strtoupper($faker->unique()->lexify('?????') . $faker->regexify('[A-Z0-9]{4}')),
-                'category_id' => 2,
+                //'category_id' => 2,
                 'created_at' => now(),
                 'updated_at' => now()
             ],
@@ -95,7 +95,7 @@ class WawiProductsSeeder extends Seeder
                 'special_price_to' => Carbon::now()->addDays(10),
                 'image' => 'lg_oled_c2.jpg',
                 'sku' => strtoupper($faker->unique()->lexify('?????') . $faker->regexify('[A-Z0-9]{4}')),
-                'category_id' => 3,
+                //'category_id' => 3,
                 'created_at' => now(),
                 'updated_at' => now()
             ]
