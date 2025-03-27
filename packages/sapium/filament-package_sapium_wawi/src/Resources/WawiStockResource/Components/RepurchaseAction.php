@@ -26,7 +26,6 @@ class RepurchaseAction extends Action
 
         try {
             Mail::raw($emailContent, function ($message) {
-                dd($message);
                 $message->to('admin@bfo.ch')
                     ->subject('Nachbestellung erforderlich')
                     ->from(config('mail.from.address', 'noreply@example.com'), config('mail.from.name', 'System'));

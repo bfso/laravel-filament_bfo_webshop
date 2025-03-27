@@ -4,8 +4,6 @@ namespace Sapium\FilamentPackageSapiumWawi\Resources;
 
 
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\MarkdownEditor;
