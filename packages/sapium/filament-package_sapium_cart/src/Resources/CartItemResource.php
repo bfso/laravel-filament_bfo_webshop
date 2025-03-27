@@ -30,31 +30,33 @@ class CartItemResource extends Resource
     }
 
     public static function table(Table $table): Table
-    {
-        return $table
-            ->columns([
-                TextColumn::make('product.title')
-                    ->label('Produktname')
-                    ->searchable()
-                    ->sortable(),
+{
+    return $table
+        ->query(fn (Builder $query) => $query->with('product')) // Stellt sicher, dass 'product' geladen wird
+        ->columns([
+            TextColumn::make('product.title')
+                ->label('Produktname')
+                ->searchable()
+                ->sortable(),
 
-                TextColumn::make('product.price')
-                    ->label('Preis')
-                    ->money('CHF')
-                    ->sortable(),
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
-    }
+            TextColumn::make('product.price')
+                ->label('Preis')
+                ->money('CHF')
+                ->sortable(),
+
+            TextColumn::make('quantity')
+                ->label('Menge')
+                ->sortable(),
+
+                TextColumn::make('total_price')
+                ->label('Totalpreis')
+                ->money('CHF')
+                ->sortable()
+                ->formatStateUsing(fn ($record) => $record->total_price),
+            
+        ]);
+}
+
 
     public static function getRelations(): array
     {
