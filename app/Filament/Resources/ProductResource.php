@@ -56,7 +56,7 @@ class ProductResource extends Resource
                 Action::make('sync_product')
                     ->label('Sync Products')
                     ->action(function () {
-                        $url = "http://localhost/v1/products";
+                        $url = url('') . "/v1/products";
                         $cURLConnection = curl_init();
 
                         curl_setopt($cURLConnection, CURLOPT_URL, $url);

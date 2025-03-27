@@ -10,6 +10,7 @@ use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
+use Filament\Resources\Pages\EditRecord;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -43,12 +44,13 @@ class WawiProductResource extends Resource
                                 ->label('Produktname'),
                             TextInput::make('sku')
                                 ->label('Artikelnummer')
+                                ->disabled(fn ($livewire) => $livewire instanceof EditRecord)
                                 ->prefix('SKU-'),
                             // Markdown-Editor für Produktbeschreibung
                             MarkdownEditor::make('product_description')
                                 ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList'])
                                 ->label('Produktbeschreibung'),
-                            
+
                             // Mehrfachauswahl für Kategorien
                             Select::make('categories')
                                 ->label('Kategorien')
@@ -59,7 +61,7 @@ class WawiProductResource extends Resource
                                 ->default(fn ($record) => $record ? $record->categories->pluck('id')->toArray() : [])
                                 ->suffix('Wähle mindestens eine Kategorie!'),
                         ]),
-                    
+
                     Tab::make('Preis')
                         ->schema([
                             // Kaufpreis als numerischer Wert
@@ -67,7 +69,7 @@ class WawiProductResource extends Resource
                                 ->numeric()
                                 ->suffix('CHF')
                                 ->label('Kaufpreis'),
-                            
+
                             // Verkaufspreis muss größer als Kaufpreis sein
                             TextInput::make('product_price')
                                 ->gt('purchase_price')
@@ -75,14 +77,14 @@ class WawiProductResource extends Resource
                                 ->numeric()
                                 ->suffix('CHF')
                                 ->label('Verkaufpreis'),
-                            
+
                             // Optionaler Spezialpreis
                             TextInput::make('special_price')
                                 ->numeric()
                                 ->suffix('CHF')
                                 ->label('Spezialpreis'),
                         ]),
-                    
+
                     Tab::make('Spezialpreis')
                         ->schema([
                             DatePicker::make('special_price_from')->label('Startdatum'),
@@ -90,7 +92,7 @@ class WawiProductResource extends Resource
                                 ->afterOrEqual('special_price_from')
                                 ->label('Enddatum'),
                         ]),
-                    
+
                     Tab::make('Bild')
                         ->schema([
                             FileUpload::make('image')
@@ -124,28 +126,28 @@ class WawiProductResource extends Resource
             TextColumn::make('sku')->label('Artikelnummer')->sortable()->searchable()->formatStateUsing(fn ($state) => 'SKU-' . $state),
 
             // Kategorie mit Farbanzeige in HTML
-            TextColumn::make('category.name') 
+            TextColumn::make('category.name')
                 ->label('Kategorie')
                 ->getStateUsing(function (WawiProduct $record) {
                     $categories = $record->categories;
-            
+
                     if ($categories && $categories->isNotEmpty()) {
                             $categoryList = $categories->map(function ($category) {
                             $color = $category->color ?? '#ffffff';
                             return "<span style='color: {$color};'>{$category->name}</span>";
                         })->toArray();
-            
+
                         return implode(', ', $categoryList);
                     }
-            
+
                     return 'No Categories';
                 })
-                ->html()  
+                ->html()
                 ->sortable()
                 ->toggleable()
                 ->searchable(),
-            
-            
+
+
                 TextColumn::make('product_description')->label('Produktbeschreibung')->sortable()->searchable()->wrap()->limit(50)->markdown(),
                 TextColumn::make('purchase_price')->label('Kaufpreis')->money('CHF')->sortable()->searchable()->toggleable(),
                 TextColumn::make('product_price')->label('Verkaufpreis')->money('CHF')->sortable()->searchable()->toggleable(),
@@ -210,8 +212,8 @@ class WawiProductResource extends Resource
                             );
                     }),
                 Filter::make('date_range')
-                    ->visible(fn (Table $table): bool =>  
-                        $table->getColumn('special_price_from')?->isVisible() && 
+                    ->visible(fn (Table $table): bool =>
+                        $table->getColumn('special_price_from')?->isVisible() &&
                         $table->getColumn('special_price_to')?->isVisible()
                     )
                     ->form([
