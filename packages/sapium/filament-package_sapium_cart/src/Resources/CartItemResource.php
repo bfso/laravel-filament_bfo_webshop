@@ -39,7 +39,7 @@ class CartItemResource extends Resource
                     ->sortable(),
 
                 TextColumn::make('product.price')
-                    ->label('Preis')
+                    ->label('Preis (inkl. 7.7% MwSt)')
                     ->money('CHF')
                     ->sortable(),
             ])
