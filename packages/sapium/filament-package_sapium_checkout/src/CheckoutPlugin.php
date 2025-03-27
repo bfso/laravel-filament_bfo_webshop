@@ -4,7 +4,6 @@ namespace Sapium\FilamentPackageSapiumCheckout;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
-use Sapium\FilamentPackageSapiumCheckout\Resources\OrderResource;
 
 class CheckoutPlugin implements Plugin
 {
@@ -31,7 +30,8 @@ class CheckoutPlugin implements Plugin
     {
         $panel
             ->resources([
-                OrderResource::class,
+                //CheckoutResource::class,
+                \Sapium\FilamentPackageSapiumCheckout\Resources\CheckoutResource::class,
             ]);
     }
 }
