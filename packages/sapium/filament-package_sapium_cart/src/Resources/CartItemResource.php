@@ -2,7 +2,7 @@
 
 namespace Sapium\FilamentPackageSapiumCart\Resources;
 
-use Sapium\FilamentPackageSapiumCart\Resources\CartItemResource\Pages\ListCartItems; 
+use Sapium\FilamentPackageSapiumCart\Resources\CartItemResource\Pages\ListCartItems;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Sapium\FilamentPackageSapiumCart\Models\CartItem;
@@ -30,32 +30,35 @@ class CartItemResource extends Resource
     }
 
     public static function table(Table $table): Table
-{
-    return $table
-        ->query(fn (Builder $query) => $query->with('product')) // Stellt sicher, dass 'product' geladen wird
-        ->columns([
-            TextColumn::make('product.title')
-                ->label('Produktname')
-                ->searchable()
-                ->sortable(),
+    {
 
-            TextColumn::make('product.price')
-                ->label('Preis')
-                ->money('CHF')
-                ->sortable(),
+        return $table
+            ->modifyQueryUsing(function (Builder $query) {
+                return $query->with('product');
+            }) // Stellt sicher, dass 'product' geladen wird
+            ->columns([
+                TextColumn::make('product.title')
+                    ->label('Produktname')
+                    ->searchable()
+                    ->sortable(),
 
-            TextColumn::make('quantity')
-                ->label('Menge')
-                ->sortable(),
+                TextColumn::make('product.price')
+                    ->label('Preis')
+                    ->money('CHF')
+                    ->sortable(),
+
+                TextColumn::make('quantity')
+                    ->label('Menge')
+                    ->sortable(),
 
                 TextColumn::make('total_price')
-                ->label('Totalpreis')
-                ->money('CHF')
-                ->sortable()
-                ->formatStateUsing(fn ($record) => $record->total_price),
-            
-        ]);
-}
+                    ->label('Totalpreis')
+                    ->money('CHF')
+                    ->sortable()
+                    ->formatStateUsing(fn($record) => $record->total_price),
+
+            ]);
+    }
 
 
     public static function getRelations(): array
