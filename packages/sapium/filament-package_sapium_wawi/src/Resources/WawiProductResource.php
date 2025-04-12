@@ -2,16 +2,15 @@
 
 namespace Sapium\FilamentPackageSapiumWawi\Resources;
 
-
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\MarkdownEditor;
-use Filament\Forms\Components\ImageEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
+use Filament\Resources\Pages\EditRecord;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
@@ -21,15 +20,12 @@ use Filament\Tables\Table;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Sapium\FilamentPackageSapiumWawi\Models\WawiProduct;
-use League\Flysystem\AwsS3V3\PortableVisibilityConverter;
-use Sapium\FilamentPackageSapiumWawi\Models\WawiCategories;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiProductResource\Pages\CreateWawiProduct;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiProductResource\Pages\EditWawiProduct;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiProductResource\Pages\ListWawiProduct;
 
 class WawiProductResource extends Resource
 {
-
     protected static ?string $model = WawiProduct::class;
     protected static ?string $navigationIcon = 'heroicon-o-cube';
 
@@ -39,55 +35,79 @@ class WawiProductResource extends Resource
             Tabs::make('Product Details')
                 ->columnSpan('full')
                 ->tabs([
-                    Tab::make('General')
+                    Tab::make('Allgemein')
                         ->schema([
-                            TextInput::make('product_name')->required(),
-                            
-                            MarkdownEditor::make('product_description')
-                            ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList']),
-                            Select::make('category_id')
-                            ->label('Kategorie') 
-                            ->options(
-                                WawiCategories::all()->mapWithKeys(function ($category) {
-                                    return [
-                                        $category->id => $category->name, 
-                                    ];
-                                })->toArray()
-                                )
-                                ->extraAttributes(function ($get) {
-                                    $categoryId = $get('category_id'); 
-                                    $category = WawiCategories::find($categoryId);
-                                    return [
-                                        'style' => $category ? 'background-color: ' . $category->color . ';' : '', 
-                                    ];
-                                })
+                            // Produktname als Pflichtfeld
+                            TextInput::make('product_name')
                                 ->required()
-                                ->suffix('erstelle zuerst eine Kategorie!!')
+                                ->label('Produktname'),
+                            TextInput::make('sku')
+                                ->label('Artikelnummer')
+                                ->required()
+                                ->disabled(fn ($livewire) => $livewire instanceof EditRecord)
+                                ->prefix('SKU-'),
+                            // Markdown-Editor für Produktbeschreibung
+                            MarkdownEditor::make('product_description')
+                                ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList'])
+                                ->label('Produktbeschreibung'),
 
-                                
+                            // Mehrfachauswahl für Kategorien
+                            Select::make('categories')
+                                ->label('Kategorien')
+                                ->multiple()
+                                ->required()
+                                ->relationship('categories', 'name')
+                                ->preload()
+                                ->searchable()
+                                ->default(fn ($record) => $record ? $record->categories->pluck('id')->toArray() : [])
+                                ->suffix('Wähle mindestens eine Kategorie!'),
                         ]),
 
-                    Tab::make('Prices')
+                    Tab::make('Preis')
                         ->schema([
-                            TextInput::make('purchase_price')->numeric()->suffix('CHF'),
-                            TextInput::make('product_price')->gt('purchase_price')->required()->numeric()->suffix('CHF'),
-                            TextInput::make('special_price')->numeric()->suffix('CHF'),
+                            // Kaufpreis als numerischer Wert
+                            TextInput::make('purchase_price')
+                                ->numeric()
+                                ->suffix('CHF')
+                                ->label('Kaufpreis'),
+
+                            // Verkaufspreis muss größer als Kaufpreis sein
+                            TextInput::make('product_price')
+                                ->gt('purchase_price')
+                                ->required()
+                                ->numeric()
+                                ->suffix('CHF')
+                                ->label('Verkaufpreis'),
+
+                            // Optionaler Spezialpreis
+                            TextInput::make('special_price')
+                                ->numeric()
+                                ->suffix('CHF')
+                                ->label('Spezialpreis'),
                         ]),
 
-                    Tab::make('Special Prices')
+                    Tab::make('Spezialpreis')
                         ->schema([
-                            DatePicker::make('special_price_from'),
-                            DatePicker::make('special_price_to')->afterOrEqual('special_price_from'),
+                            DatePicker::make('special_price_from')
+                                ->label('Startdatum')
+                                ->minDate('1970-01-01')
+                                ->maxDate('2025-12-31'),
+                            DatePicker::make('special_price_to')
+                                ->afterOrEqual('special_price_from')
+                                ->label('Enddatum')
+                                ->minDate('1970-01-01')
+                                ->maxDate('2025-12-31'),
                         ]),
 
-                    Tab::make('Image')
+                    Tab::make('Bild')
                         ->schema([
                             FileUpload::make('image')
                                 ->image()
                                 ->downloadable()
                                 ->preserveFilenames()
-                                ->disk('public') 
-                                ->directory('product_images'),
+                                ->disk('public')
+                                ->directory('product_images')
+                                ->label('Bild'),
                         ]),
                 ]),
         ]);
@@ -107,68 +127,40 @@ class WawiProductResource extends Resource
         // Use toggleable() to allow users to select visible columns.
         // Important: Key columns should not be toggleable.
         $tableComponents = [
-            TextColumn::make('id')
-                ->sortable(),
-            TextColumn::make('product_name')
-                ->label('Name')
-                ->sortable()
-                ->searchable(),
-            TextColumn::make('category.name') 
-                ->label('Category')
+            TextColumn::make('id')->sortable(),
+            TextColumn::make('product_name')->label('Produktname')->sortable()->searchable(),
+            TextColumn::make('sku')->label('Artikelnummer')->sortable()->searchable()->formatStateUsing(fn ($state) => 'SKU-' . $state),
+
+            // Kategorie mit Farbanzeige in HTML
+            TextColumn::make('category.name')
+                ->label('Kategorie')
                 ->getStateUsing(function (WawiProduct $record) {
-                    $category = $record->category;
-                    $color = $category ? $category->color : '#ffffff'; 
-                    $name = $category ? $category->name : 'No Category';
-                    
-                    return "<span style='background-color: {$color}; padding: 5px 10px; border-radius: 15px; color: #ffffff; font-weight: bold; text-transform: uppercase;'>{$name}</span>";
+                    $categories = $record->categories;
+
+                    if ($categories && $categories->isNotEmpty()) {
+                            $categoryList = $categories->map(function ($category) {
+                            $color = $category->color ?? '#ffffff';
+                            return "<span style='color: {$color};'>{$category->name}</span>";
+                        })->toArray();
+
+                        return implode(', ', $categoryList);
+                    }
+
+                    return 'No Categories';
                 })
-                ->html() 
+                ->html()
                 ->sortable()
                 ->toggleable()
                 ->searchable(),
-            TextColumn::make('product_description')
-                ->label('Beschreibung')
-                ->sortable()
-                ->searchable()
-                ->wrap()
-                ->limit(50)
-                ->markdown(),
-            TextColumn::make('purchase_price')
-                ->label('Kaufpreis')
-                ->money('CHF')
-                ->sortable()
-                ->searchable()
-                ->toggleable(),
-            TextColumn::make('product_price')
-                ->label('Verkaufpreis')
-                ->money('CHF')
-                ->sortable()
-                ->searchable()
-                ->toggleable(),
-            TextColumn::make('special_price')
-                ->label('Spezialpreis')
-                ->money('CHF')
-                ->sortable()
-                ->searchable()
-                ->toggleable(),
-            TextColumn::make('special_price_from')
-                ->label('Start Spezialpreis')
-                ->date()
-                ->sortable()
-                ->searchable()
-                ->toggleable(),
-            TextColumn::make('special_price_to')
-                ->label('End Spezialpreis')
-                ->date()
-                ->sortable()
-                ->searchable()
-                ->toggleable(),
-            ImageColumn::make('image')
-                ->label('Bild')
-                ->defaultImageUrl(url('/storage/product_images/placeholder.png'))
-                ->sortable()
-                ->searchable()
-                ->toggleable(isToggledHiddenByDefault: true),
+
+
+                TextColumn::make('product_description')->label('Produktbeschreibung')->sortable()->searchable()->wrap()->limit(50)->markdown(),
+                TextColumn::make('purchase_price')->label('Kaufpreis')->money('CHF')->sortable()->searchable()->toggleable(),
+                TextColumn::make('product_price')->label('Verkaufpreis')->money('CHF')->sortable()->searchable()->toggleable(),
+                TextColumn::make('special_price')->label('Spezialpreis')->money('CHF')->sortable()->searchable()->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('special_price_from')->label('Startdatum Spezialpreis')->date()->sortable()->searchable()->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('special_price_to')->label('Enddatum Spezialpreis')->date()->sortable()->searchable()->toggleable(isToggledHiddenByDefault: true),
+                ImageColumn::make('image')->label('Bild')->defaultImageUrl(url('/storage/product_images/placeholder.png'))->sortable()->searchable()->toggleable(isToggledHiddenByDefault: true),
         ];
 
         return $table
@@ -226,8 +218,8 @@ class WawiProductResource extends Resource
                             );
                     }),
                 Filter::make('date_range')
-                    ->visible(fn (Table $table): bool =>  
-                        $table->getColumn('special_price_from')?->isVisible() && 
+                    ->visible(fn (Table $table): bool =>
+                        $table->getColumn('special_price_from')?->isVisible() &&
                         $table->getColumn('special_price_to')?->isVisible()
                     )
                     ->form([

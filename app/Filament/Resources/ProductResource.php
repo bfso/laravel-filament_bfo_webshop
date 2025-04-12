@@ -14,6 +14,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Tables\Columns\Layout\Stack;
+use Filament\Tables\Actions\Action;
 
 class ProductResource extends Resource
 {
@@ -52,16 +53,37 @@ class ProductResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->headerActions([
-                \Filament\Tables\Actions\Action::make("sync_product")
-                    ->label("Sync Product")
+                Action::make('sync_product')
+                    ->label('Sync Products')
                     ->action(function () {
-                        return redirect('/packages/sapium/filament-package_sapium_wawi/src/WawigetProduct.php');
+                        $url = url('') . "/v1/products";
+                        $cURLConnection = curl_init();
+
+                        curl_setopt($cURLConnection, CURLOPT_URL, $url);
+                        curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
+
+                        $wawiProductsJson = curl_exec($cURLConnection);
+                        curl_close($cURLConnection);
+
+                        $jsonArrayResponse = json_decode($wawiProductsJson, true);
+
+                        foreach ($jsonArrayResponse as $wawiProduct) {
+                            Product::query()->upsert(
+                                [
+                                    'sku' => $wawiProduct['sku'],
+                                    'title' => $wawiProduct['product_name'],
+                                    'description' => $wawiProduct['product_description'],
+                                    'price' => $wawiProduct['product_price'],
+                                ],['sku']
+                            );
+                        }
+
+                        // dd($jsonArrayResponse);
+
                     })
-            ])            
+            ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 

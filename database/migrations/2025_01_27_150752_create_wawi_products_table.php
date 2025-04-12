@@ -17,11 +17,10 @@ return new class extends Migration
             $table->float('special_price')->nullable();
             $table->date('special_price_from')->nullable();
             $table->date('special_price_to')->nullable();
-            $table->string('image')->nullable(); 
+            $table->string('image')->nullable();
+            $table->string('sku')->unique();
             $table->timestamps();
 
-            // Adding the category_id foreign key field
-            $table->foreignId('category_id')->constrained('wawi_categories')->onDelete('cascade'); // Adds the category_id field and references wawi_categories
         });
     }
 

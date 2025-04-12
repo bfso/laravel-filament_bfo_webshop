@@ -4,16 +4,16 @@ namespace Sapium\FilamentPackageSapiumWawi\Resources;
 
 
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
+use Sapium\FilamentPackageSapiumWawi\Resources\WawiStockResource\Components\RepurchaseAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\Filter;
@@ -22,6 +22,7 @@ use Sapium\FilamentPackageSapiumWawi\Models\WawiStock;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiStockResource\Pages\CreateWawiStock;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiStockResource\Pages\EditWawiStock;
 use Sapium\FilamentPackageSapiumWawi\Resources\WawiStockResource\Pages\ListWawiStock;
+use Sapium\FilamentPackageSapiumWawi\Models\WawiSuppliers;
 
 class WawiStockResource extends Resource
 {
@@ -35,22 +36,35 @@ class WawiStockResource extends Resource
             Tabs::make('Product Details')
                 ->columnSpan('full')
                 ->tabs([
-                    Tab::make('General')
+                    Tab::make('Allgemein')
                         ->schema([
                             ColorPicker::make('color')
-                                ->required(),
+                                ->required()
+                                ->label('Farbe'),
                             MarkdownEditor::make('description')
-                                ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList']),
+                                ->toolbarButtons(['bold', 'italic', 'strike', 'link', 'codeBlock', 'orderedList', 'bulletList'])
+                                ->label('Beschreibung'),
                             TextInput::make('amount')
-                                ->numeric(),
+                                ->numeric()
+                                ->label('Menge'),
                             TextInput::make('price')
-                                ->label('Purchase Price')
+                                ->label('Kaufpreis')
                                 ->numeric()
                                 ->suffix('CHF'),
+                            Select::make('supplier_id')
+                                ->label('Verleiher') 
+                                ->options(
+                                    WawiSuppliers::all()->mapWithKeys(function ($supplier) {
+                                        return [
+                                            $supplier->id => $supplier->name, 
+                                        ];
+                                    })->toArray()
+                                    )
+                                    ->required()
+                                    ->suffix('erstelle zuerst eine Supplier!!'),
                             ]),
-                    ]),
-
-    ]);
+                        ]),
+                    ]);
     }
 
     public static function getPages(): array
@@ -70,7 +84,7 @@ class WawiStockResource extends Resource
             TextColumn::make('id')
                 ->sortable(),
             TextColumn::make('color')
-                ->label('Color')
+                ->label('Farbe')
                 ->sortable()
                 ->searchable()
                 ->formatStateUsing(function ($state) {
@@ -92,7 +106,20 @@ class WawiStockResource extends Resource
                 ->toggleable(),
             TextColumn::make('amount')
                 ->sortable()
-                ->toggleable(),
+                ->toggleable()
+                ->label('Menge'),
+            TextColumn::make('supplier.name') 
+                ->label('Verleiher')
+                ->getStateUsing(function (WawiStock $record) {
+                    $supplier = $record->supplier; 
+                    $name = $supplier ? $supplier->name : 'No Supplier';
+                    
+                    return "<span>{$name}</span>";
+                })
+                ->html() 
+                ->sortable()
+                ->toggleable()
+                ->searchable(),
         ];
 
         return $table
@@ -103,11 +130,11 @@ class WawiStockResource extends Resource
                         TextInput::make('amount_from')
                             ->numeric()
                             ->placeholder('Min. amount')
-                            ->label('Min. amount'),
+                            ->label('Min. Menge'),
                         TextInput::make('amount_to')
                             ->numeric()
                             ->placeholder('Max. amount')
-                            ->label('Max. amount'),
+                            ->label('Max. Menge'),
                     ])
                     ->query(function (Builder $query, array $data) {
                         return $query->when(
@@ -121,6 +148,10 @@ class WawiStockResource extends Resource
             ])
             ->actions([
                 EditAction::make(),
+                RepurchaseAction::make('repurchase')
+                    ->record(fn ($record) => [
+                        'record' => $record,
+                    ]),
             ])
             ->bulkActions([
                 DeleteBulkAction::make()

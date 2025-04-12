@@ -4,7 +4,7 @@ namespace Sapium\FilamentPackageSapiumWawi\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Sapium\FilamentPackageSapiumWawi\Models\WawiProduct;  // Import the WawiProduct model
+use Sapium\FilamentPackageSapiumWawi\Models\WawiSuppliers;
 
 
 class WawiStock extends Model
@@ -12,7 +12,10 @@ class WawiStock extends Model
     use HasFactory; 
 
     protected $table = "wawi_stocks";
-    protected $fillable = ['color', 'description','price','amount'];  // Add 'product_id' to fillable
+    protected $fillable = ['color', 'description','price','amount', 'supplier_id'];  
 
-    // Define the relationship between stock and product
+    public function supplier()
+    {
+        return $this->belongsTo(WawiSuppliers::class, 'supplier_id'); 
+    }
 }
