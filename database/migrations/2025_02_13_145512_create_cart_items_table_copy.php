@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('cart_id');
             $table->unsignedBigInteger('product_id');
-            $table->unsignedInteger('quantity')->default(1);
+            $table->unsignedInteger('quantity')->default(49);
             $table->json('options')->nullable();
             $table->timestamps();
 

@@ -4,6 +4,7 @@ namespace Sapium\FilamentPackageSapiumCart\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Sapium\FilamentPackageSapiumCart\Models\CartItem;
 
 class Cart extends Model
 {
@@ -20,7 +21,7 @@ class Cart extends Model
         $this->save();
     }
   
-    public function cartItems() : HasMany {
-        return $this->hasMany(CartItems::class);
+    public function cartItems() {
+        return $this->hasMany(CartItem::class);
     } 
 }
