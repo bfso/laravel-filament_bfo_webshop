@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Filament\Shop\Resources\CheckoutResource\Pages;
+namespace Sapium\FilamentPackageSapiumCheckout\Resources\CheckoutResource\Pages;
 
-use App\Filament\Shop\Resources\CheckoutResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Widgets\StatsOverviewWidget\Stat;
+use Sapium\FilamentPackageSapiumCheckout\Resources\CheckoutResource;
 
 class ListCheckouts extends ListRecords
 {
@@ -19,7 +18,7 @@ class ListCheckouts extends ListRecords
     }
 
     public static function canAccess(array $parameters = []): bool {
-        redirect(to: CheckoutResource::getUrl('create'));    
+        redirect(to: CheckoutResource::getUrl('create'));
         return true;
     }
 }

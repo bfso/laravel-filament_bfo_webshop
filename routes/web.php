@@ -1,8 +1,7 @@
 <?php
 
-use App\Filament\Shop\Resources\CheckoutResource\Pages\CheckoutConfirmationPage;
-use App\Http\Livewire\CheckoutForm;
 use Illuminate\Support\Facades\Route;
+use Sapium\FilamentPackageSapiumCheckout\Resources\CheckoutResource\Pages\CheckoutConfirmationPage;
 use Sapium\FilamentPackageSapiumWawi\Controllers\ProductController;
 use App\Http\Controllers\ProductSyncController;
 

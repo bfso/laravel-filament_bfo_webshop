@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Filament\Shop\Resources\CheckoutResource\Pages;
+namespace Sapium\FilamentPackageSapiumCheckout\Resources\CheckoutResource\Pages;
 
-use App\Filament\Shop\Resources\CheckoutResource;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\Page;
 use Filament\Forms\Components\Placeholder;
+use Sapium\FilamentPackageSapiumCheckout\Resources\CheckoutResource;
 
 class CheckoutConfirmationPage extends Page
 {

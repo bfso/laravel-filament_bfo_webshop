@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Sapium\FilamentPackageSapiumCheckout\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

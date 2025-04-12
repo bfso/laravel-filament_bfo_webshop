@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Filament\Shop\Resources\CheckoutResource\Pages;
+namespace Sapium\FilamentPackageSapiumCheckout\Resources\CheckoutResource\Pages;
 
-use App\Filament\Shop\Resources\CheckoutResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Sapium\FilamentPackageSapiumCheckout\Resources\CheckoutResource;
 
 class EditCheckout extends EditRecord
 {

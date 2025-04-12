@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Filament\Shop\Resources;
+namespace Sapium\FilamentPackageSapiumCheckout\Resources;
 
-use App\Filament\Shop\Resources\CheckoutResource\Pages;
-use App\Filament\Shop\Resources\CheckoutResource\RelationManagers;
-use App\Models\Checkout;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Sapium\FilamentPackageSapiumCheckout\Models\Checkout;
+use Sapium\FilamentPackageSapiumCheckout\Resources\CheckoutResource\Pages\CheckoutConfirmationPage;
+use Sapium\FilamentPackageSapiumCheckout\Resources\CheckoutResource\Pages\CreateCheckout;
+use Sapium\FilamentPackageSapiumCheckout\Resources\CheckoutResource\Pages\EditCheckout;
+use Sapium\FilamentPackageSapiumCheckout\Resources\CheckoutResource\Pages\ListCheckouts;
 
 class CheckoutResource extends Resource
 {
@@ -57,9 +56,10 @@ class CheckoutResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCheckouts::route('/'),
-            'create' => Pages\CreateCheckout::route('/create'),
-            'edit' => Pages\EditCheckout::route('/{record}/edit'),
+            'index' => ListCheckouts::route('/'),
+            'create' => CreateCheckout::route('/create'),
+            'edit' => EditCheckout::route('/{record}/edit'),
+            'confirm' => CheckoutConfirmationPage::route('/confirm')
         ];
     }
 }

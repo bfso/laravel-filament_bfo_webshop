@@ -4,6 +4,7 @@ namespace Sapium\FilamentPackageSapiumWawi\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class WawiProduct extends Model
 {
@@ -25,7 +26,7 @@ class WawiProduct extends Model
     ];
 
     // Define the relationship with WawiCategories
-    public function categories()
+    public function categories() : BelongsToMany
     {
         return $this->belongsToMany(WawiCategories::class, 'product_category', 'product_id', 'category_id');
     }
