@@ -18,7 +18,6 @@ return new class extends Migration
         // Table: orders
         Schema::create('checkouts', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('date_time')->nullable(false);
             $table->decimal('end_price', 10, 2)->nullable(false);
             $table->bigInteger('checkout_customer_id')->nullable(false);
             $table->bigInteger('delivery_method_id')->nullable(false);
@@ -42,10 +41,10 @@ return new class extends Migration
         // Table: checkout customers
         Schema::create('checkout_customers', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name', 255)->nullable(false);
-            $table->string('last_name', 255)->nullable(false);
-            $table->date('birth_date')->nullable(false);
-            $table->string('email_address', 255)->nullable(false);
+            $table->string('first_name', 255)->nullable(true);
+            $table->string('last_name', 255)->nullable(true);
+            $table->date('birth_date')->nullable(true);
+            $table->string('email_address', 255)->nullable(true);
             $table->string('phone_number', 255)->nullable(true);
             $table->string('street', 255)->nullable(false);
             $table->string('zip', 255)->nullable(false);
@@ -53,14 +52,6 @@ return new class extends Migration
             $table->bigInteger('country_id')->nullable(false);
             $table->timestamps();
         });
-
-
-        // Table: checkout countries
-        Schema::create('checkout_countries', function (Blueprint $table) {
-            $table->id();
-            $table->string('country_label');
-        });
-
 
         // Create foreign keys
 //        Schema::table('checkout_items', function (Blueprint $table) {
